@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "383029880473",
+    "project_id": "p-paper-87fca",
+    "storage_bucket": "p-paper-87fca.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:383029880473:android:b4f1d1687fd2220a853a08",
+        "android_client_info": {
+          "package_name": "com.example.p_papper"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "383029880473-0jlislpnvsjofdp0pmqvr44es05qugpn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.p_papper",
+            "certificate_hash": "da0095bb7176ad4b8a127312e55cf16b3da96d81"
+          }
+        },
+        {
+          "client_id": "383029880473-hfpbc4rc4tkb8pakd63og80edesccuu1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyClrZd6eZJu7AhsW_JCFrMgvy6l8rlBc0g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "383029880473-hfpbc4rc4tkb8pakd63og80edesccuu1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
