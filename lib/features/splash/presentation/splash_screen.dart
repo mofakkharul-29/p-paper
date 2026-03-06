@@ -67,8 +67,8 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
             scale: _scaleAnimation,
             child: const Icon(
               Icons.rocket_launch_outlined,
-              size: 120,
-              color: Colors.white70,
+              size: 125,
+              color: Colors.black87,
               shadows: [
                 Shadow(
                   color: Colors.black87,
