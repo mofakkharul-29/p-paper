@@ -5,6 +5,7 @@ import 'package:p_papper/core/utils/custom_text.dart';
 import 'package:p_papper/core/utils/scaffold_body_container_color.dart';
 import 'package:p_papper/features/onboarding/data/pages.dart';
 import 'package:p_papper/features/onboarding/presentation/provider/current_page_provider.dart';
+import 'package:p_papper/features/onboarding/presentation/provider/onboarding_notifier_provider.dart';
 import 'package:p_papper/features/onboarding/presentation/widgets/custom_animated_container.dart';
 import 'package:p_papper/features/onboarding/presentation/widgets/page_builder_helper.dart';
 
@@ -36,6 +37,9 @@ class _OnboardingScreenState
   Widget build(BuildContext context) {
     final pages = onboardingPages;
     final currentPageIndex = ref.watch(currentPageProvider);
+    final onboardingStatus = ref.watch(
+      onboardingStatusProvider,
+    );
 
     return Scaffold(
       backgroundColor: gradientStart,
@@ -126,15 +130,36 @@ class _OnboardingScreenState
                       103,
                       103,
                     ),
-              onPressed: () => _onPressed(type: 'next'),
-              child: getChild(
-                currentPageIndex ==
+              onPressed: onboardingStatus.isLoading
+                  ? null
+                  : currentPageIndex ==
                         onboardingPages.length - 1
-                    ? 'Get Started'
-                    : 'Next',
-                Colors.black87,
-                18,
-              ),
+                  ? () async {
+                      ref
+                          .read(
+                            onboardingStatusProvider
+                                .notifier,
+                          )
+                          .setIsFirstLaunch();
+                    }
+                  : () => _onPressed(type: 'next'),
+              child: onboardingStatus.isLoading
+                  ? const SizedBox(
+                      height: 20,
+                      width: 20,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        color: Colors.black,
+                      ),
+                    )
+                  : getChild(
+                      currentPageIndex ==
+                              onboardingPages.length - 1
+                          ? 'Get Started'
+                          : 'Next',
+                      Colors.black87,
+                      18,
+                    ),
             ),
           ],
         ),
