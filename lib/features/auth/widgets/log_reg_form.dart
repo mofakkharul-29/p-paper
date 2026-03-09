@@ -27,6 +27,7 @@ class LogRegForm extends StatelessWidget {
             labelText: 'Password',
             obscureText: true,
           ),
+          
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             crossAxisAlignment: CrossAxisAlignment.baseline,
