@@ -33,6 +33,8 @@ class CustomTextFormField extends StatelessWidget {
       keyboardType: keyboardType,
       textInputAction: textInputAction,
       obscureText: obscureText,
+      onChanged: onChanged,
+      validator: validator,
       onTapOutside: (_) {
         FocusManager.instance.primaryFocus?.unfocus();
       },
@@ -44,9 +46,7 @@ class CustomTextFormField extends StatelessWidget {
           );
         }
       },
-      onChanged: onChanged,
-      validator: validator,
-      style: TextStyle(
+      style: const TextStyle(
         fontSize: 16,
         fontWeight: FontWeight.w700,
         color: Colors.black87,
@@ -61,7 +61,7 @@ class CustomTextFormField extends StatelessWidget {
             ? Icon(icon, size: 32)
             : null,
         prefixIconColor: Colors.black87,
-        prefixIconConstraints: BoxConstraints(
+        prefixIconConstraints: const BoxConstraints(
           minHeight: 40,
           minWidth: 45,
         ),
