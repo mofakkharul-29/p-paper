@@ -54,7 +54,7 @@ class CustomTextFormField extends StatelessWidget {
       ),
       decoration: InputDecoration(
         contentPadding: const EdgeInsets.symmetric(
-          vertical: 18,
+          vertical: 15,
           horizontal: 8,
         ),
         prefixIcon: icon != null
@@ -63,27 +63,8 @@ class CustomTextFormField extends StatelessWidget {
         prefixIconColor: Colors.black87,
         prefixIconConstraints: BoxConstraints(
           minHeight: 40,
-          minWidth: 40,
+          minWidth: 45,
         ),
-        // icon: icon != null
-        //     ? Container(
-        //         height: 45,
-        //         width: 45,
-        //         alignment: Alignment.center,
-        //         padding: const EdgeInsets.all(6),
-        //         decoration: BoxDecoration(
-        //           color: Colors.grey,
-        //           borderRadius: BorderRadius.circular(8),
-        //         ),
-        //         child: Center(
-        //           child: Icon(
-        //             icon,
-        //             color: Colors.black87,
-        //             size: 30,
-        //           ),
-        //         ),
-        //       )
-        //     : null,
         iconColor: Colors.black87,
         labelText: labelText,
         floatingLabelStyle: const TextStyle(
