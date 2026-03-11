@@ -9,11 +9,13 @@ class LogRegForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final key = GlobalKey<FormState>();
     final double buttonWidth = MediaQuery.of(
       context,
     ).size.width;
 
     return Form(
+      key: key,
       child: Column(
         children: [
           const CustomTextFormField(
@@ -27,7 +29,7 @@ class LogRegForm extends StatelessWidget {
             labelText: 'Password',
             obscureText: true,
           ),
-          
+
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             crossAxisAlignment: CrossAxisAlignment.baseline,
@@ -40,11 +42,14 @@ class LogRegForm extends StatelessWidget {
                 fontWeight: FontWeight.w400,
               ),
               const SizedBox(width: 5),
-              CustomTextButton(
-                onPressed: () {
-                  debugPrint('pressed');
-                },
-                text: 'Sign up',
+              Padding(
+                padding: const EdgeInsets.only(right: 8.0),
+                child: CustomTextButton(
+                  onPressed: () {
+                    debugPrint('pressed');
+                  },
+                  text: 'Sign up',
+                ),
               ),
             ],
           ),
