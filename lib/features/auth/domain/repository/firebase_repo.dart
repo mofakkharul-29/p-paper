@@ -179,7 +179,9 @@ class FirebaseRepo implements AuthRepo {
       }
 
       final String? providerId =
-          currentUser.providerData.firstOrNull?.providerId;
+          currentUser.providerData.isNotEmpty
+          ? currentUser.providerData.first.providerId
+          : null;
 
       if (providerId == 'google.com') {
         final GoogleSignInAccount? googleSignInAccount =
