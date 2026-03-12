@@ -214,7 +214,7 @@ class FirebaseRepo implements AuthRepo {
           credential,
         );
       }
-      await _deleteUserFirestoreData(currentUser.uid);
+      // await _deleteUserFirestoreData(currentUser.uid);
       await currentUser.delete();
       await Future.wait([
         _googleSignIn.signOut(),
@@ -250,29 +250,29 @@ class FirebaseRepo implements AuthRepo {
     }
   }
 
-  Future<void> _deleteUserFirestoreData(String uid) async {
-    final WriteBatch batch = _firestore.batch();
-    final DocumentReference userDoc = _firestore
-        .collection('users')
-        .doc(uid);
-    batch.delete(userDoc);
+  // Future<void> _deleteUserFirestoreData(String uid) async {
+  //   final WriteBatch batch = _firestore.batch();
+  //   final DocumentReference userDoc = _firestore
+  //       .collection('users')
+  //       .doc(uid);
+  //   batch.delete(userDoc);
 
-    // Delete sub-collections
-    final List<String> subCollections = ['comments'];
+  //   // Delete sub-collections
+  //   final List<String> subCollections = ['comments'];
 
-    for (final String col in subCollections) {
-      final QuerySnapshot snapshot = await _firestore
-          .collection('users')
-          .doc(uid)
-          .collection(col)
-          .get();
+  //   for (final String col in subCollections) {
+  //     final QuerySnapshot snapshot = await _firestore
+  //         .collection('users')
+  //         .doc(uid)
+  //         .collection(col)
+  //         .get();
 
-      for (final QueryDocumentSnapshot doc
-          in snapshot.docs) {
-        batch.delete(doc.reference);
-      }
-    }
+  //     for (final QueryDocumentSnapshot doc
+  //         in snapshot.docs) {
+  //       batch.delete(doc.reference);
+  //     }
+  //   }
 
-    await batch.commit();
-  }
+  //   await batch.commit();
+  // }
 }
