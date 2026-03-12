@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:p_papper/features/auth/domain/app_user.dart';
 import 'package:p_papper/features/auth/domain/auth_repo.dart';
@@ -38,6 +39,8 @@ class FirebaseRepo implements AuthRepo {
             firebaseUser.metadata.creationTime ??
             DateTime.now(),
       );
+      await _writeUserDataToFirestore(appUser);
+
       return appUser;
     } catch (e) {
       throw Exception('Sign up failed: $e');
@@ -104,6 +107,7 @@ class FirebaseRepo implements AuthRepo {
             firebaseUser.metadata.creationTime ??
             DateTime.now(),
       );
+      await _writeUserDataToFirestore(user);
       return user;
     } on FirebaseAuthException catch (e) {
       if (e.code ==
@@ -156,6 +160,14 @@ class FirebaseRepo implements AuthRepo {
     } catch (e) {
       throw Exception('log out failed: $e');
     }
+  }
+
+  Future<void> _writeUserDataToFirestore(
+    AppUser user,
+  ) async {
+    await _firestore.collection('users').doc(user.uid).set({
+      ...user.toMap(),
+    }, SetOptions(merge: true));
   }
 
   @override
@@ -214,7 +226,7 @@ class FirebaseRepo implements AuthRepo {
           credential,
         );
       }
-      // await _deleteUserFirestoreData(currentUser.uid);
+      await _deleteUserFirestoreData(currentUser.uid);
       await currentUser.delete();
       await Future.wait([
         _googleSignIn.signOut(),
@@ -250,29 +262,33 @@ class FirebaseRepo implements AuthRepo {
     }
   }
 
-  // Future<void> _deleteUserFirestoreData(String uid) async {
-  //   final WriteBatch batch = _firestore.batch();
-  //   final DocumentReference userDoc = _firestore
-  //       .collection('users')
-  //       .doc(uid);
-  //   batch.delete(userDoc);
+  Future<void> _deleteUserFirestoreData(String uid) async {
+    final WriteBatch batch = _firestore.batch();
+    final DocumentReference userDoc = _firestore
+        .collection('users')
+        .doc(uid);
+    batch.delete(userDoc);
 
-  //   // Delete sub-collections
-  //   final List<String> subCollections = ['comments'];
+    // Delete sub-collections
+    final List<String> subCollections = ['comments'];
 
-  //   for (final String col in subCollections) {
-  //     final QuerySnapshot snapshot = await _firestore
-  //         .collection('users')
-  //         .doc(uid)
-  //         .collection(col)
-  //         .get();
+    for (final String col in subCollections) {
+      final QuerySnapshot snapshot = await _firestore
+          .collection('users')
+          .doc(uid)
+          .collection(col)
+          .get();
 
-  //     for (final QueryDocumentSnapshot doc
-  //         in snapshot.docs) {
-  //       batch.delete(doc.reference);
-  //     }
-  //   }
+      for (final QueryDocumentSnapshot doc
+          in snapshot.docs) {
+        batch.delete(doc.reference);
+      }
+    }
 
-  //   await batch.commit();
-  // }
+    await batch.commit();
+  }
 }
+
+final firebaseRepoProvider = Provider<FirebaseRepo>((ref) {
+  return FirebaseRepo();
+});
