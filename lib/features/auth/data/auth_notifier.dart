@@ -1,6 +1,8 @@
 import 'dart:async';
 
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:p_papper/core/error/auth_exception.dart';
 import 'package:p_papper/features/auth/domain/app_user.dart';
 import 'package:p_papper/features/auth/domain/repository/firebase_repo.dart';
 
@@ -31,6 +33,9 @@ class AuthNotifier extends AsyncNotifier<AppUser?> {
           .registerWithEmailPassword(email, password, name);
 
       state = AsyncValue.data(user);
+    } on AuthException catch (e, st) {
+      debugPrint('Auth error: ${e.message}');
+      state = AsyncValue.error(e.message, st);
     } catch (e, st) {
       state = AsyncValue.error(e, st);
     }
@@ -45,8 +50,14 @@ class AuthNotifier extends AsyncNotifier<AppUser?> {
       final AppUser? user = await _authRepo
           .loginWithEmailAndPassword(email, password);
       state = AsyncValue.data(user);
+    } on AuthException catch (e, st) {
+      debugPrint('Auth error: ${e.message}');
+      state = AsyncValue.error(e.message, st);
     } catch (e, st) {
-      state = AsyncValue.error(e, st);
+      state = AsyncValue.error(
+        'Unexpected error occurred.',
+        st,
+      );
     }
   }
 
@@ -56,6 +67,9 @@ class AuthNotifier extends AsyncNotifier<AppUser?> {
       final AppUser? user = await _authRepo
           .logInWithGoogle();
       state = AsyncValue.data(user);
+    } on AuthException catch (e, st) {
+      debugPrint('Auth error: ${e.message}');
+      state = AsyncValue.error(e.message, st);
     } catch (e, st) {
       state = AsyncValue.error(e, st);
     }

@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:p_papper/core/error/auth_exception.dart';
 import 'package:p_papper/features/auth/domain/app_user.dart';
 import 'package:p_papper/features/auth/domain/auth_repo.dart';
 
@@ -42,8 +43,32 @@ class FirebaseRepo implements AuthRepo {
       await _writeUserDataToFirestore(appUser);
 
       return appUser;
-    } catch (e) {
-      throw Exception('Sign up failed: $e');
+    } on FirebaseAuthException catch (e) {
+      switch (e.code) {
+        case 'email-already-in-use':
+          throw const AuthException(
+            code: 'email-in-use',
+            message: 'Email already registered.',
+          );
+
+        case 'weak-password':
+          throw const AuthException(
+            code: 'weak-password',
+            message: 'Password is too weak.',
+          );
+
+        case 'invalid-email':
+          throw const AuthException(
+            code: 'invalid-email',
+            message: 'Invalid email address.',
+          );
+
+        default:
+          throw AuthException(
+            code: e.code,
+            message: e.message ?? 'Registration failed',
+          );
+      }
     }
   }
 
@@ -70,8 +95,39 @@ class FirebaseRepo implements AuthRepo {
             DateTime.now(),
       );
       return user;
-    } catch (e) {
-      throw Exception('login failed: $e');
+    } on FirebaseAuthException catch (e) {
+      switch (e.code) {
+        case 'user-not-found':
+          throw const AuthException(
+            code: 'user-not-found',
+            message: 'No account found with this email.',
+          );
+
+        case 'wrong-password':
+          throw const AuthException(
+            code: 'wrong-password',
+            message: 'Incorrect password.',
+          );
+
+        case 'invalid-email':
+          throw const AuthException(
+            code: 'invalid-email',
+            message: 'Invalid email address.',
+          );
+
+        case 'network-request-failed':
+          throw const AuthException(
+            code: 'network-error',
+            message:
+                'Network error. Check your connection.',
+          );
+
+        default:
+          throw AuthException(
+            code: e.code,
+            message: e.message ?? 'Login failed.',
+          );
+      }
     }
   }
 
@@ -235,30 +291,45 @@ class FirebaseRepo implements AuthRepo {
     } on FirebaseAuthException catch (e) {
       switch (e.code) {
         case 'requires-recent-login':
-          throw Exception(
-            'Please log out and log back in before deleting.',
+          throw const AuthException(
+            code: 'requires-recent-login',
+            message:
+                'Please log out and log back in before deleting.',
           );
         case 'wrong-password':
-          throw Exception(
-            'Incorrect password. Please try again.',
+          throw const AuthException(
+            code: 'wrong-password',
+            message:
+                'Incorrect password. Please try again.',
           );
         case 'invalid-credential':
-          throw Exception(
-            'Invalid credentials. Please try again.',
+          throw const AuthException(
+            code: 'invalid-credential',
+            message:
+                'Invalid credentials. Please try again.',
           );
         case 'network-request-failed':
-          throw Exception(
-            'Network error. Check your connection.',
+          throw const AuthException(
+            code: 'network-request-failed',
+            message:
+                'Network error. Check your connection.',
           );
         case 'user-not-found':
-          throw Exception('Account not found.');
+          throw const AuthException(
+            code: 'user-not-found',
+            message: 'Account not found.',
+          );
         default:
-          throw Exception(
-            'Delete account failed: ${e.message}',
+          throw AuthException(
+            code: e.code,
+            message: e.message ?? 'Delete account failed',
           );
       }
     } catch (e) {
-      throw Exception('Delete account failed: $e');
+      throw AuthException(
+        code: 'some-thing_went_wrong',
+        message: e.toString(),
+      );
     }
   }
 

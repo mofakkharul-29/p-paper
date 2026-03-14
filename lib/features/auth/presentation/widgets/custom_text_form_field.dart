@@ -38,14 +38,6 @@ class CustomTextFormField extends StatelessWidget {
       onTapOutside: (_) {
         FocusManager.instance.primaryFocus?.unfocus();
       },
-      onTap: () {
-        if (controller != null) {
-          controller!.selection = TextSelection(
-            baseOffset: 0,
-            extentOffset: controller!.text.length,
-          );
-        }
-      },
       style: const TextStyle(
         fontSize: 16,
         fontWeight: FontWeight.w700,

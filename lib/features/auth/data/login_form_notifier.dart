@@ -41,7 +41,7 @@ class LoginFormNotifier extends Notifier<LoginFormState> {
       passwordError = 'Password is required';
     } else if (password.length < 6) {
       passwordError =
-          'Password must be atleast 6 characters';
+          'Password must be at least 6 characters';
     }
 
     final isValid = _calculateFormValidity(
@@ -60,6 +60,18 @@ class LoginFormNotifier extends Notifier<LoginFormState> {
 
   void setSubmitting(bool value) {
     state = state.copyWith(isSubmitting: value);
+  }
+
+  bool validateForm(String email, String password) {
+    validateEmail(email);
+    validatePassword(password);
+
+    return _calculateFormValidity(
+      email: email,
+      password: password,
+      emailError: state.emailError,
+      passwordError: state.passwordError,
+    );
   }
 
   bool _calculateFormValidity({

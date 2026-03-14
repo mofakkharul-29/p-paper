@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:p_papper/core/utils/app_snackbar.dart';
 import 'package:p_papper/core/utils/custom_elevated_button.dart';
 import 'package:p_papper/core/utils/custom_text.dart';
 import 'package:p_papper/core/utils/custom_text_button.dart';
@@ -17,6 +18,8 @@ class LogRegForm extends ConsumerStatefulWidget {
 }
 
 class _LogRegFormState extends ConsumerState<LogRegForm> {
+  bool hasSubmitted = false;
+
   final _key = GlobalKey<FormState>();
   final TextEditingController _emailController =
       TextEditingController();
@@ -37,6 +40,30 @@ class _LogRegFormState extends ConsumerState<LogRegForm> {
 
   @override
   Widget build(BuildContext context) {
+    Object? lastError;
+
+    ref.listen(authNotifierProvider, (previous, next) {
+      next.whenOrNull(
+        data: (user) {
+          if (user != null && previous?.value != user) {
+            AppSnackbar.showSuccess(
+              context,
+              'Login successful',
+            );
+          }
+        },
+        error: (error, _) {
+          if (lastError != error) {
+            lastError = error;
+            AppSnackbar.showError(
+              context,
+              error.toString(),
+            );
+          }
+        },
+      );
+    });
+
     final asyncAuthState = ref.watch(authNotifierProvider);
     final authNotifier = ref.read(
       authNotifierProvider.notifier,
@@ -60,7 +87,7 @@ class _LogRegFormState extends ConsumerState<LogRegForm> {
             focusNode: _emailFocus,
             errorText: formState.emailError,
             onChanged: (value) {
-              if (!formState.isValid) {
+              if (hasSubmitted) {
                 formNotifier.validateEmail(value);
               }
             },
@@ -74,14 +101,9 @@ class _LogRegFormState extends ConsumerState<LogRegForm> {
             focusNode: _passwordFocus,
             errorText: formState.passwordError,
             onChanged: (value) {
-              final email = _emailController.text;
-              final password = _passwordController.text;
-              formNotifier.validateEmail(email);
-              formNotifier.validatePassword(password);
-              authNotifier.loginWithEmailAndPassword(
-                email,
-                password,
-              );
+              if (hasSubmitted) {
+                formNotifier.validatePassword(value);
+              }
             },
             icon: Icons.lock_rounded,
             labelText: 'Password',
@@ -116,7 +138,13 @@ class _LogRegFormState extends ConsumerState<LogRegForm> {
             onPressed: asyncAuthState.isLoading
                 ? null
                 : () {
-                    if (formState.isValid) {
+                    setState(() {
+                      hasSubmitted = true;
+                    });
+                    if (formNotifier.validateForm(
+                      _emailController.text,
+                      _passwordController.text,
+                    )) {
                       authNotifier
                           .loginWithEmailAndPassword(
                             _emailController.text,
