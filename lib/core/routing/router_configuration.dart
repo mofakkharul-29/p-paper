@@ -56,7 +56,7 @@ class RouterConfiguration {
         if (authPath.contains(path) ||
             path == '/onboarding' ||
             path == '/splash') {
-          return '/home';
+          return '/news';
         }
         return null;
       },

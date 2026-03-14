@@ -4,7 +4,9 @@ import 'package:go_router/go_router.dart';
 import 'package:p_papper/core/utils/custom_elevated_button.dart';
 import 'package:p_papper/core/utils/custom_text.dart';
 import 'package:p_papper/core/utils/custom_text_button.dart';
-import 'package:p_papper/features/auth/widgets/custom_text_form_field.dart';
+import 'package:p_papper/features/auth/presentation/provider/auth_notifier_provider.dart';
+import 'package:p_papper/features/auth/presentation/provider/login_form_notifier_provider.dart';
+import 'package:p_papper/features/auth/presentation/widgets/custom_text_form_field.dart';
 
 class LogRegForm extends ConsumerStatefulWidget {
   const LogRegForm({super.key});
@@ -24,8 +26,6 @@ class _LogRegFormState extends ConsumerState<LogRegForm> {
   final FocusNode _emailFocus = FocusNode();
   final FocusNode _passwordFocus = FocusNode();
 
-  bool _hasSubmitted = false;
-
   @override
   void dispose() {
     super.dispose();
@@ -37,6 +37,16 @@ class _LogRegFormState extends ConsumerState<LogRegForm> {
 
   @override
   Widget build(BuildContext context) {
+    final asyncAuthState = ref.watch(authNotifierProvider);
+    final authNotifier = ref.read(
+      authNotifierProvider.notifier,
+    );
+
+    final formState = ref.watch(loginFormNotifierProvider);
+    final formNotifier = ref.read(
+      loginFormNotifierProvider.notifier,
+    );
+
     final double buttonWidth = MediaQuery.of(
       context,
     ).size.width;
@@ -48,6 +58,12 @@ class _LogRegFormState extends ConsumerState<LogRegForm> {
           CustomTextFormField(
             controller: _emailController,
             focusNode: _emailFocus,
+            errorText: formState.emailError,
+            onChanged: (value) {
+              if (!formState.isValid) {
+                formNotifier.validateEmail(value);
+              }
+            },
             icon: Icons.email_rounded,
             labelText: 'Email',
             keyboardType: TextInputType.emailAddress,
@@ -56,6 +72,17 @@ class _LogRegFormState extends ConsumerState<LogRegForm> {
           CustomTextFormField(
             controller: _passwordController,
             focusNode: _passwordFocus,
+            errorText: formState.passwordError,
+            onChanged: (value) {
+              final email = _emailController.text;
+              final password = _passwordController.text;
+              formNotifier.validateEmail(email);
+              formNotifier.validatePassword(password);
+              authNotifier.loginWithEmailAndPassword(
+                email,
+                password,
+              );
+            },
             icon: Icons.lock_rounded,
             labelText: 'Password',
             obscureText: true,
@@ -86,7 +113,17 @@ class _LogRegFormState extends ConsumerState<LogRegForm> {
           ),
           const SizedBox(height: 15),
           CustomElevatedButton(
-            onPressed: () {},
+            onPressed: asyncAuthState.isLoading
+                ? null
+                : () {
+                    if (formState.isValid) {
+                      authNotifier
+                          .loginWithEmailAndPassword(
+                            _emailController.text,
+                            _passwordController.text,
+                          );
+                    }
+                  },
             bgColor: Colors.blue,
             elevation: 1.5,
             fixedSize: Size(buttonWidth * 0.92, 53),
@@ -95,12 +132,21 @@ class _LogRegFormState extends ConsumerState<LogRegForm> {
                 5,
               ),
             ),
-            child: const CustomText(
-              text: 'login',
-              color: Colors.black87,
-              fontSize: 18,
-              fontWeight: FontWeight.w800,
-            ),
+            child: asyncAuthState.isLoading
+                ? SizedBox(
+                    width: 24,
+                    height: 24,
+                    child: CircularProgressIndicator(
+                      color: Colors.white,
+                      strokeWidth: 2,
+                    ),
+                  )
+                : const CustomText(
+                    text: 'login',
+                    color: Colors.black87,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w800,
+                  ),
           ),
         ],
       ),

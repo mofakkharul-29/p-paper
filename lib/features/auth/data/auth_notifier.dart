@@ -6,7 +6,6 @@ import 'package:p_papper/features/auth/domain/repository/firebase_repo.dart';
 
 class AuthNotifier extends AsyncNotifier<AppUser?> {
   late final FirebaseRepo _authRepo;
-  // late final FirebaseFirestore _firestore;
 
   @override
   Future<AppUser?> build() async {

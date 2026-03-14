@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:p_papper/core/utils/body_container.dart';
 import 'package:p_papper/core/utils/custom_divider.dart';
 import 'package:p_papper/core/utils/log_reg_options.dart';
-import 'package:p_papper/features/auth/widgets/log_reg_form.dart';
+import 'package:p_papper/features/auth/presentation/widgets/log_reg_form.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
