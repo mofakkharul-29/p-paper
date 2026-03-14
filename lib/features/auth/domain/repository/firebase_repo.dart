@@ -7,6 +7,7 @@ import 'package:p_papper/features/auth/domain/app_user.dart';
 import 'package:p_papper/features/auth/domain/auth_repo.dart';
 
 class FirebaseRepo implements AuthRepo {
+  // later split this huge file in small chunks
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
   final FirebaseFirestore _firestore =
