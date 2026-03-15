@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:p_papper/core/utils/app_snackbar.dart';
+import 'package:p_papper/core/utils/auth_form_type.dart';
 import 'package:p_papper/core/utils/custom_elevated_button.dart';
 import 'package:p_papper/core/utils/custom_text.dart';
 import 'package:p_papper/core/utils/custom_text_button.dart';
@@ -10,7 +11,8 @@ import 'package:p_papper/features/auth/presentation/provider/login_form_notifier
 import 'package:p_papper/features/auth/presentation/widgets/custom_text_form_field.dart';
 
 class LogRegForm extends ConsumerStatefulWidget {
-  const LogRegForm({super.key});
+  final AuthFormType type;
+  const LogRegForm({super.key, required this.type});
 
   @override
   ConsumerState<LogRegForm> createState() =>
@@ -27,8 +29,12 @@ class _LogRegFormState extends ConsumerState<LogRegForm> {
   final TextEditingController _passwordController =
       TextEditingController();
 
+  final TextEditingController _nameController =
+      TextEditingController();
+
   final FocusNode _emailFocus = FocusNode();
   final FocusNode _passwordFocus = FocusNode();
+  final FocusNode _nameFocus = FocusNode();
 
   @override
   void dispose() {
@@ -36,19 +42,22 @@ class _LogRegFormState extends ConsumerState<LogRegForm> {
     _passwordController.dispose();
     _emailFocus.dispose();
     _passwordFocus.dispose();
+    _nameController.dispose();
+    _nameFocus.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-
     ref.listen(authNotifierProvider, (previous, next) {
       next.whenOrNull(
         data: (user) {
           if (user != null) {
             AppSnackbar.showSuccess(
               context,
-              'Login successful',
+              widget.type == AuthFormType.login
+                  ? 'Login successful'
+                  : 'Account created successfully',
             );
           }
         },
@@ -96,6 +105,21 @@ class _LogRegFormState extends ConsumerState<LogRegForm> {
             keyboardType: TextInputType.emailAddress,
           ),
           const SizedBox(height: 10),
+          if (widget.type == AuthFormType.register)
+            CustomTextFormField(
+              controller: _nameController,
+              focusNode: _nameFocus,
+              errorText: formState.nameError,
+              onChanged: (name) {
+                if (hasSubmitted) {
+                  formNotifier.validateName(name);
+                }
+              },
+              icon: Icons.person_rounded,
+              labelText: 'Name',
+            ),
+          if (widget.type == AuthFormType.register)
+            const SizedBox(height: 10),
           CustomTextFormField(
             controller: _passwordController,
             focusNode: _passwordFocus,
@@ -115,8 +139,10 @@ class _LogRegFormState extends ConsumerState<LogRegForm> {
             crossAxisAlignment: CrossAxisAlignment.baseline,
             textBaseline: TextBaseline.alphabetic,
             children: [
-              const CustomText(
-                text: 'don\'t have an account?',
+              CustomText(
+                text: widget.type == AuthFormType.login
+                    ? 'don\'t have an account?'
+                    : 'have an account?',
                 color: Colors.black87,
                 fontSize: 15,
                 fontWeight: FontWeight.w400,
@@ -126,9 +152,21 @@ class _LogRegFormState extends ConsumerState<LogRegForm> {
                 padding: const EdgeInsets.only(right: 8.0),
                 child: CustomTextButton(
                   onPressed: () {
-                    context.go('/register');
+                    ref
+                        .read(
+                          loginFormNotifierProvider
+                              .notifier,
+                        )
+                        .reset();
+                    context.go(
+                      widget.type == AuthFormType.login
+                          ? '/register'
+                          : '/login',
+                    );
                   },
-                  text: 'Sign up',
+                  text: widget.type == AuthFormType.register
+                      ? 'login'
+                      : 'Sign up',
                 ),
               ),
             ],
@@ -145,11 +183,21 @@ class _LogRegFormState extends ConsumerState<LogRegForm> {
                       _emailController.text,
                       _passwordController.text,
                     )) {
-                      authNotifier
-                          .loginWithEmailAndPassword(
-                            _emailController.text,
-                            _passwordController.text,
-                          );
+                      if (widget.type ==
+                          AuthFormType.login) {
+                        authNotifier
+                            .loginWithEmailAndPassword(
+                              _emailController.text,
+                              _passwordController.text,
+                            );
+                      } else {
+                        authNotifier
+                            .registerWithEmailAndPassword(
+                              _emailController.text,
+                              _nameController.text,
+                              _passwordController.text,
+                            );
+                      }
                     }
                   },
             bgColor: Colors.blue,
@@ -169,8 +217,11 @@ class _LogRegFormState extends ConsumerState<LogRegForm> {
                       strokeWidth: 2,
                     ),
                   )
-                : const CustomText(
-                    text: 'login',
+                : CustomText(
+                    text:
+                        widget.type == AuthFormType.register
+                        ? 'sign up'
+                        : 'login',
                     color: Colors.black87,
                     fontSize: 18,
                     fontWeight: FontWeight.w800,

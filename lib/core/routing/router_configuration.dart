@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:p_papper/core/routing/route_name.dart';
 import 'package:p_papper/core/routing/routing_refresh_listenable.dart';
+import 'package:p_papper/core/utils/page_transition.dart';
 import 'package:p_papper/features/auth/presentation/login_page.dart';
 import 'package:p_papper/features/auth/presentation/registration_page.dart';
 import 'package:p_papper/features/news/news_screen.dart';
@@ -75,13 +76,25 @@ class RouterConfiguration {
         GoRoute(
           path: '/login',
           name: loginRoute,
-          builder: (context, state) => const LoginPage(),
+          // builder: (context, state) => const LoginPage(),
+          pageBuilder: (context, state) =>
+              buildCustomTransitionPage(
+                key: state.pageKey,
+                child: const LoginPage(),
+                transitionType: PageTransitionType.fade,
+              ),
         ),
         GoRoute(
           path: '/register',
           name: registerRoute,
-          builder: (context, state) =>
-              const RegistrationPage(),
+          // builder: (context, state) =>
+          //     const RegistrationPage(),
+          pageBuilder: (context, state) =>
+              buildCustomTransitionPage(
+                key: state.pageKey,
+                child: const RegistrationPage(),
+                transitionType: PageTransitionType.fade,
+              ),
         ),
         GoRoute(
           path: '/news',

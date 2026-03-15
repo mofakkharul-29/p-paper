@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:p_papper/core/utils/auth_form_type.dart';
 import 'package:p_papper/core/utils/body_container.dart';
 import 'package:p_papper/core/utils/custom_divider.dart';
 import 'package:p_papper/core/utils/log_reg_options.dart';
@@ -24,7 +25,9 @@ class LoginPage extends StatelessWidget {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      const LogRegForm(),
+                      const LogRegForm(
+                        type: AuthFormType.login,
+                      ),
                       const SizedBox(height: 20),
                       const CustomDivider(),
                       const SizedBox(height: 20),

@@ -1,10 +1,45 @@
 import 'package:flutter/material.dart';
+import 'package:p_papper/core/utils/auth_form_type.dart';
+import 'package:p_papper/core/utils/body_container.dart';
+import 'package:p_papper/core/utils/custom_divider.dart';
+import 'package:p_papper/core/utils/log_reg_options.dart';
+import 'package:p_papper/features/auth/presentation/widgets/log_reg_form.dart';
 
 class RegistrationPage extends StatelessWidget {
   const RegistrationPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: Center(child: Text('register')));
+    return Scaffold(
+      backgroundColor: Colors.transparent,
+      body: BodyContainer(
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            return SingleChildScrollView(
+              padding: EdgeInsets.symmetric(horizontal: 15),
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  minHeight: constraints.maxHeight,
+                ),
+                child: Center(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const LogRegForm(
+                        type: AuthFormType.register,
+                      ),
+                      const SizedBox(height: 20),
+                      const CustomDivider(),
+                      const SizedBox(height: 20),
+                      const LogRegOptions(),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          },
+        ),
+      ),
+    );
   }
 }

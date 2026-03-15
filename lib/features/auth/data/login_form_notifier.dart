@@ -7,6 +7,10 @@ class LoginFormNotifier extends Notifier<LoginFormState> {
     return const LoginFormState();
   }
 
+  void reset() {
+    state = const LoginFormState();
+  }
+
   void validateEmail(String email) {
     final String? emailError = _validateEmail(email);
 
@@ -32,6 +36,15 @@ class LoginFormNotifier extends Notifier<LoginFormState> {
         emailError: state.emailError,
         passwordError: passwordError,
       ),
+    );
+  }
+
+  void validateName(String name) {
+    final String? nameError = _validateName(name);
+
+    state = state.copyWith(
+      name: name,
+      nameError: nameError,
     );
   }
 
@@ -80,6 +93,15 @@ class LoginFormNotifier extends Notifier<LoginFormState> {
       return 'Password is required';
     } else if (password.length < 6) {
       return 'Password must be at least 6 characters';
+    }
+    return null;
+  }
+
+  String? _validateName(String name) {
+    if (name.isEmpty) {
+      return 'Name is required';
+    } else if (name.length < 2) {
+      return 'Name too short';
     }
     return null;
   }
