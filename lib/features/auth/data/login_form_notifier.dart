@@ -8,81 +8,86 @@ class LoginFormNotifier extends Notifier<LoginFormState> {
   }
 
   void validateEmail(String email) {
-    String? emailError;
-
-    if (email.isEmpty) {
-      emailError = 'Email is required';
-    } else {
-      final emailRegex = RegExp(
-        r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
-      );
-      if (!emailRegex.hasMatch(email)) {
-        emailError = 'Enter a valid email';
-      }
-    }
-    final bool isValid = _calculateFormValidity(
-      email: email,
-      password: state.password,
-      emailError: emailError,
-      passwordError: state.passwordError,
-    );
+    final String? emailError = _validateEmail(email);
 
     state = state.copyWith(
       email: email,
       emailError: emailError,
-      isValid: isValid,
+      isValid: _isFormValid(
+        emailError: emailError,
+        passwordError: state.passwordError,
+      ),
     );
   }
 
   void validatePassword(String password) {
-    String? passwordError;
-
-    if (password.isEmpty) {
-      passwordError = 'Password is required';
-    } else if (password.length < 6) {
-      passwordError =
-          'Password must be at least 6 characters';
-    }
-
-    final isValid = _calculateFormValidity(
-      email: state.email,
-      password: password,
-      emailError: state.emailError,
-      passwordError: passwordError,
+    final String? passwordError = _validatePassword(
+      password,
     );
 
     state = state.copyWith(
       password: password,
       passwordError: passwordError,
+      isValid: _isFormValid(
+        emailError: state.emailError,
+        passwordError: passwordError,
+      ),
+    );
+  }
+
+  bool validateForm(String email, String password) {
+    final String? emailError = _validateEmail(email);
+    final String? passwordError = _validatePassword(
+      password,
+    );
+
+    final isValid = _isFormValid(
+      emailError: emailError,
+      passwordError: passwordError,
+    );
+
+    state = state.copyWith(
+      email: email,
+      password: password,
+      emailError: emailError,
+      passwordError: passwordError,
       isValid: isValid,
     );
+
+    return isValid;
   }
 
   void setSubmitting(bool value) {
     state = state.copyWith(isSubmitting: value);
   }
 
-  bool validateForm(String email, String password) {
-    validateEmail(email);
-    validatePassword(password);
-
-    return _calculateFormValidity(
-      email: email,
-      password: password,
-      emailError: state.emailError,
-      passwordError: state.passwordError,
-    );
+  String? _validateEmail(String email) {
+    if (email.isEmpty) {
+      return 'Email is required';
+    } else {
+      final emailRegex = RegExp(
+        r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
+      );
+      if (!emailRegex.hasMatch(email)) {
+        return 'Enter a valid email';
+      }
+    }
+    return null;
   }
 
-  bool _calculateFormValidity({
-    required String email,
-    required String password,
+  String? _validatePassword(String password) {
+    if (password.isEmpty) {
+      return 'Password is required';
+    } else if (password.length < 6) {
+      return 'Password must be at least 6 characters';
+    }
+    return null;
+  }
+
+  bool _isFormValid({
     required String? emailError,
     required String? passwordError,
   }) {
-    return email.isNotEmpty &&
-        password.isNotEmpty &&
-        emailError == null &&
-        passwordError == null;
+    return emailError == null && passwordError == null;
   }
 }

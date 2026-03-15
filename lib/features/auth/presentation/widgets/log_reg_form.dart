@@ -19,6 +19,7 @@ class LogRegForm extends ConsumerStatefulWidget {
 
 class _LogRegFormState extends ConsumerState<LogRegForm> {
   bool hasSubmitted = false;
+  Object? lastError;
 
   final _key = GlobalKey<FormState>();
   final TextEditingController _emailController =
@@ -31,21 +32,20 @@ class _LogRegFormState extends ConsumerState<LogRegForm> {
 
   @override
   void dispose() {
-    super.dispose();
     _emailController.dispose();
     _passwordController.dispose();
     _emailFocus.dispose();
     _passwordFocus.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    Object? lastError;
 
     ref.listen(authNotifierProvider, (previous, next) {
       next.whenOrNull(
         data: (user) {
-          if (user != null && previous?.value != user) {
+          if (user != null) {
             AppSnackbar.showSuccess(
               context,
               'Login successful',

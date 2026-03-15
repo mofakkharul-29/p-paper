@@ -18,18 +18,24 @@ class LoginFormState {
   LoginFormState copyWith({
     String? email,
     String? password,
-    String? emailError,
-    String? passwordError,
+    Object? emailError = _noChange,
+    Object? passwordError = _noChange,
     bool? isSubmitting,
     bool? isValid,
   }) {
     return LoginFormState(
       email: email ?? this.email,
       password: password ?? this.password,
-      emailError: emailError,
-      passwordError: passwordError,
+      emailError: emailError == _noChange
+          ? this.emailError
+          : emailError as String?,
+      passwordError: passwordError == _noChange
+          ? this.passwordError
+          : passwordError as String?,
       isSubmitting: isSubmitting ?? this.isSubmitting,
       isValid: isValid ?? this.isValid,
     );
   }
+
+  static const _noChange = Object();
 }
