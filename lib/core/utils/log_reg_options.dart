@@ -7,7 +7,6 @@ class LogRegOptions extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final asyncAuthState = ref.watch(authNotifierProvider);
     final authNotifier = ref.read(
       authNotifierProvider.notifier,
     );
