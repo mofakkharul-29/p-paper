@@ -25,7 +25,7 @@ class _ApiKeyInterceptor extends Interceptor {
     RequestOptions options,
     RequestInterceptorHandler handler,
   ) {
-    options.queryParameters['api-Key'] =
+    options.queryParameters['api-key'] =
         '4e6f8206-e897-4380-9bea-21943a277039';
     options.queryParameters['show-fields'] =
         'thumbnail,headline,trailText';
