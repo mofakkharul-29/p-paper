@@ -16,11 +16,15 @@ class NewsService {
         '/search',
         queryParameters: {'page': page, 'page-size': 10},
       );
-
-      final results = response.data['response']['results'];
+      final results =
+          response.data['response']['results'] as List;
 
       return results
-          .map<ArticleModel>((article) => ArticleModel.fromJson(article))
+          .map<ArticleModel>(
+            (article) => ArticleModel.fromJson(
+              article as Map<String, dynamic>,
+            ),
+          )
           .toList();
     } on DioException catch (e) {
       throw ApiException(handleDioError(e));
