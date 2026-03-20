@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:p_papper/core/constant/app_colors.dart';
 import 'package:p_papper/features/news/domain/article_model.dart';
 import 'package:p_papper/features/news/presentation/provider/news_notifier_provoder.dart';
 import 'package:p_papper/features/news/widgets/news_card.dart';
@@ -60,22 +61,28 @@ class _NewsScreenState extends ConsumerState<NewsScreen> {
 
     if (state.isLoading && state.articles.isEmpty) {
       return const Scaffold(
-        body: Center(child: CircularProgressIndicator()),
+        backgroundColor: AppColors.screenBackground,
+        body: Center(
+          child: CircularProgressIndicator(
+            color: AppColors.spinnerColor,
+          ),
+        ),
       );
     }
 
     if (state.error != null && state.articles.isEmpty) {
       return Scaffold(
+        backgroundColor: AppColors.screenBackground,
         body: Center(child: Text(state.error!)),
       );
     }
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF1F3F6),
+      backgroundColor: AppColors.screenBackground,
       body: RefreshIndicator(
         onRefresh: _onRefresh,
-        color: Colors.white70,
-        backgroundColor: Colors.black87,
+        color: AppColors.refreshForeground,
+        backgroundColor: AppColors.refreshBackground,
         child: ListView.builder(
           controller: _scrollController,
           itemCount:
@@ -88,16 +95,11 @@ class _NewsScreenState extends ConsumerState<NewsScreen> {
               return NewsCard(news: article);
             }
 
-            return Padding(
+            return const Padding(
               padding: EdgeInsets.all(16.0),
               child: Center(
                 child: CircularProgressIndicator(
-                  color: const Color.fromARGB(
-                    255,
-                    79,
-                    127,
-                    231,
-                  ),
+                  color: AppColors.spinnerColor,
                 ),
               ),
             );
