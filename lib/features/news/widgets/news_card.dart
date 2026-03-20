@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:p_papper/core/constant/app_colors.dart';
 import 'package:p_papper/core/utils/custom_text.dart';
 import 'package:p_papper/features/news/domain/article_model.dart';
+import 'package:p_papper/features/news/widgets/custom_bookmark.dart';
 
 class NewsCard extends StatelessWidget {
   final ArticleModel news;
@@ -43,20 +44,26 @@ class NewsCard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              ClipRRect(
-                borderRadius: const BorderRadius.vertical(
-                  top: Radius.circular(12),
-                ),
-                child: news.imageUrl.isNotEmpty
-                    ? Image.network(
-                        news.imageUrl,
-                        height: 180,
-                        width: double.infinity,
-                        fit: BoxFit.cover,
-                        errorBuilder: (_, _, _) =>
-                            _buildPlaceholder(),
-                      )
-                    : _buildPlaceholder(),
+              Stack(
+                children: [
+                  ClipRRect(
+                    borderRadius:
+                        const BorderRadius.vertical(
+                          top: Radius.circular(12),
+                        ),
+                    child: news.imageUrl.isNotEmpty
+                        ? Image.network(
+                            news.imageUrl,
+                            height: 180,
+                            width: double.infinity,
+                            fit: BoxFit.cover,
+                            errorBuilder: (_, _, _) =>
+                                _buildPlaceholder(),
+                          )
+                        : _buildPlaceholder(),
+                  ),
+                  CustomBookmark(onTap: () {}),
+                ],
               ),
               Padding(
                 padding: const EdgeInsets.all(12),
