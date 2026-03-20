@@ -9,6 +9,8 @@ class NewsNotifier extends Notifier<NewsState> {
   }
 
   Future<void> fetchNews({bool loadMore = false}) async {
+    if (state.isLoading || !state.hasMore) return;
+
     try {
       state = state.copyWith(isLoading: true);
       final nextPage = loadMore ? state.page + 1 : 1;
@@ -21,6 +23,8 @@ class NewsNotifier extends Notifier<NewsState> {
             : news,
         page: nextPage,
         isLoading: false,
+        hasMore: news.isNotEmpty,
+        error: null,
       );
     } catch (e) {
       state = state.copyWith(
