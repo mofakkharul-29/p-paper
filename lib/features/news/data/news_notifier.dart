@@ -11,6 +11,7 @@ class NewsNotifier extends Notifier<NewsState> {
   Future<void> fetchNews({bool loadMore = false}) async {
     try {
       state = state.copyWith(isLoading: true);
+      debugPrint('hello');
       final nextPage = loadMore ? state.page + 1 : 1;
       final news = await ref
           .read(newsRepositoryProvider)
