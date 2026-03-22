@@ -4,7 +4,7 @@ class AppColors {
   AppColors._(); // prevent instantiation
 
   // ── Screen ───────────────────────────────────────────
-  static const Color screenBackground = Color(0xFFF0F2F5);
+  static const Color screenBackground = Color(0xFFB8BEC5);
 
   // ── Card ─────────────────────────────────────────────
   static const Color cardSurface = Color(0xFFFFFFFF);
@@ -27,4 +27,7 @@ class AppColors {
   static const Color spinnerColor = Color(0xFF2A52BE);
   static const Color refreshBackground = Color(0xFF1A2B4A);
   static const Color refreshForeground = Color(0xFFFFFFFF);
+
+  // __ appbar color ______________________________
+  static const Color appBarBgColor = Color(0xFFB6B4B4);
 }

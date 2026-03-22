@@ -3,3 +3,4 @@ const String onboardingRoute = 'onboarding';
 const String loginRoute = 'login';
 const String registerRoute = 'register';
 const String newsRoute = 'news';
+const String homeRoute = 'home';

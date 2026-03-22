@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:p_papper/core/constant/app_colors.dart';
+import 'package:p_papper/core/utils/custom_app_bar.dart';
+import 'package:p_papper/core/utils/custom_bottom_nav_bar.dart';
 import 'package:p_papper/features/news/domain/article_model.dart';
 import 'package:p_papper/features/news/presentation/provider/news_notifier_provoder.dart';
 import 'package:p_papper/features/news/widgets/news_card.dart';
@@ -57,6 +59,8 @@ class _NewsScreenState extends ConsumerState<NewsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final appBar = CustomAppBar(title: 'News Feeds');
+
     final state = ref.watch(newsNotifierProvider);
 
     if (state.isLoading && state.articles.isEmpty) {
@@ -79,6 +83,7 @@ class _NewsScreenState extends ConsumerState<NewsScreen> {
 
     return Scaffold(
       backgroundColor: AppColors.screenBackground,
+      appBar: appBar.customAppbar,
       body: RefreshIndicator(
         onRefresh: _onRefresh,
         color: AppColors.refreshForeground,
@@ -106,6 +111,7 @@ class _NewsScreenState extends ConsumerState<NewsScreen> {
           },
         ),
       ),
+      bottomNavigationBar: const CustomBottomNavBar(),
     );
   }
 }
