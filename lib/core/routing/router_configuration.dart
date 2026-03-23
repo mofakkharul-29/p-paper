@@ -6,8 +6,11 @@ import 'package:p_papper/core/routing/routing_refresh_listenable.dart';
 import 'package:p_papper/core/utils/page_transition.dart';
 import 'package:p_papper/features/auth/presentation/login_page.dart';
 import 'package:p_papper/features/auth/presentation/registration_page.dart';
+import 'package:p_papper/features/bookmark/book_mark.dart';
+import 'package:p_papper/features/home/home.dart';
 import 'package:p_papper/features/news/news_screen.dart';
 import 'package:p_papper/features/onboarding/presentation/onboarding_screen.dart';
+import 'package:p_papper/features/profile/profile.dart';
 import 'package:p_papper/features/splash/presentation/splash_screen.dart';
 
 class RouterConfiguration {
@@ -67,16 +70,17 @@ class RouterConfiguration {
           name: splashRoute,
           builder: (context, state) => const SplashScreen(),
         ),
+
         GoRoute(
           path: '/onboarding',
           name: onboardingRoute,
           builder: (context, state) =>
               const OnboardingScreen(),
         ),
+
         GoRoute(
           path: '/login',
           name: loginRoute,
-          // builder: (context, state) => const LoginPage(),
           pageBuilder: (context, state) =>
               buildCustomTransitionPage(
                 key: state.pageKey,
@@ -84,11 +88,10 @@ class RouterConfiguration {
                 transitionType: PageTransitionType.fade,
               ),
         ),
+
         GoRoute(
           path: '/register',
           name: registerRoute,
-          // builder: (context, state) =>
-          //     const RegistrationPage(),
           pageBuilder: (context, state) =>
               buildCustomTransitionPage(
                 key: state.pageKey,
@@ -96,10 +99,50 @@ class RouterConfiguration {
                 transitionType: PageTransitionType.fade,
               ),
         ),
-        GoRoute(
-          path: '/news',
-          name: newsRoute,
-          builder: (context, state) => const NewsScreen(),
+        StatefulShellRoute.indexedStack(
+          parentNavigatorKey: _rootNavigationKey,
+          builder: (context, state, navigationShell) {
+            final String path = state.uri.path;
+            debugPrint('path is : $path');
+            return Home(
+              navigationShell: navigationShell,
+              path: path,
+            );
+          },
+          branches: [
+            StatefulShellBranch(
+              routes: <RouteBase>[
+                GoRoute(
+                  path: '/news',
+                  name: homeRoute,
+                  builder: (context, state) =>
+                      const NewsScreen(),
+                ),
+              ],
+            ),
+
+            StatefulShellBranch(
+              routes: <RouteBase>[
+                GoRoute(
+                  path: '/bookmarks',
+                  name: bookmarkRoute,
+                  builder: (context, state) =>
+                      const BookMark(),
+                ),
+              ],
+            ),
+
+            StatefulShellBranch(
+              routes: <RouteBase>[
+                GoRoute(
+                  path: '/profile',
+                  name: profileRoute,
+                  builder: (context, state) =>
+                      const Profile(),
+                ),
+              ],
+            ),
+          ],
         ),
       ],
     );
