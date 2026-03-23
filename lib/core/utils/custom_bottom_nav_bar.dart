@@ -24,14 +24,24 @@ class CustomBottomNavBar extends StatelessWidget {
           );
         },
         backgroundColor: AppColors.appBarBgColor,
-        selectedItemColor: Colors.black87,
-        unselectedItemColor: Colors.black87,
+        selectedItemColor: const Color.fromRGBO(
+          0,
+          0,
+          0,
+          0.867,
+        ),
+        unselectedItemColor: const Color.fromRGBO(
+          0,
+          0,
+          0,
+          0.867,
+        ),
         iconSize: 20,
-        selectedLabelStyle: TextStyle(
+        selectedLabelStyle: const TextStyle(
           fontWeight: FontWeight.w800,
           fontSize: 12,
         ),
-        unselectedLabelStyle: TextStyle(fontSize: 12),
+        unselectedLabelStyle: const TextStyle(fontSize: 12),
         items: [
           _bottomNavigationBarItem(
             label: 'News',
