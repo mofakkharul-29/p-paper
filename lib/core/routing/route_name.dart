@@ -8,3 +8,5 @@ const String newsRoute = 'news';
 const String homeRoute = 'home';
 const String bookmarkRoute = 'bookmark';
 const String profileRoute = 'profile';
+
+const String articleRoute = 'article';

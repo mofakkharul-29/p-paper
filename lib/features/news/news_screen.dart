@@ -61,7 +61,7 @@ class _NewsScreenState extends ConsumerState<NewsScreen> {
 
     if (state.isLoading && state.articles.isEmpty) {
       return const Scaffold(
-        backgroundColor: AppColors.screenBackground,
+        backgroundColor: AppColors.scaffoldBgColor,
         body: Center(
           child: CircularProgressIndicator(
             color: AppColors.spinnerColor,

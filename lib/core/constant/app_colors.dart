@@ -24,10 +24,11 @@ class AppColors {
   static const Color placeholderIcon = Color(0xFFB0BAC9);
 
   // ── Indicators / interactive ─────────────────────────
-  static const Color spinnerColor = Color(0xFF2A52BE);
-  static const Color refreshBackground = Color(0xFF1A2B4A);
-  static const Color refreshForeground = Color(0xFFFFFFFF);
+  static const Color spinnerColor = Color(0xFF64B5F6);
+  static const Color refreshBackground = Color(0x42000000);
+  static const Color refreshForeground = Color(0xFF64B5F6);
 
   // __ appbar color ______________________________
   static const Color appBarBgColor = Color(0xFFB6B4B4);
+  static const Color scaffoldBgColor = Color(0xFFB6B4B4);
 }

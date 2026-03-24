@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:p_papper/core/constant/app_colors.dart';
 import 'package:p_papper/core/utils/custom_text.dart';
@@ -20,7 +21,13 @@ class NewsCard extends StatelessWidget {
       color: Colors.transparent,
       child: InkWell(
         onTap: () {
-          // 👉 later: open article / webview
+          context.pushNamed(
+            'article',
+            extra: {
+              'url': news.webUrl,
+              'title': news.title,
+            },
+          );
         },
         child: Container(
           margin: const EdgeInsets.symmetric(

@@ -9,6 +9,7 @@ import 'package:p_papper/features/auth/presentation/registration_page.dart';
 import 'package:p_papper/features/bookmark/book_mark.dart';
 import 'package:p_papper/features/home/home.dart';
 import 'package:p_papper/features/news/news_screen.dart';
+import 'package:p_papper/features/news/widgets/article_webview_page.dart';
 import 'package:p_papper/features/onboarding/presentation/onboarding_screen.dart';
 import 'package:p_papper/features/profile/profile.dart';
 import 'package:p_papper/features/splash/presentation/splash_screen.dart';
@@ -98,6 +99,24 @@ class RouterConfiguration {
                 child: const RegistrationPage(),
                 transitionType: PageTransitionType.fade,
               ),
+        ),
+        GoRoute(
+          path: '/article',
+          name: articleRoute,
+          parentNavigatorKey: _rootNavigationKey,
+          pageBuilder: (context, state) {
+            final data =
+                state.extra as Map<String, dynamic>;
+
+            return buildCustomTransitionPage(
+              key: state.pageKey,
+              child: ArticleWebviewPage(
+                url: data['url'],
+                title: data['title'],
+              ),
+              transitionType: PageTransitionType.fade,
+            );
+          },
         ),
         StatefulShellRoute.indexedStack(
           parentNavigatorKey: _rootNavigationKey,
