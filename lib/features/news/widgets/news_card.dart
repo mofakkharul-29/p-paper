@@ -69,7 +69,10 @@ class NewsCard extends StatelessWidget {
                           )
                         : _buildPlaceholder(),
                   ),
-                  CustomBookmark(onTap: () {}),
+                  CustomBookmark(
+                    currentArticle: news,
+                    onTap: () {},
+                  ),
                 ],
               ),
               Padding(
@@ -96,7 +99,6 @@ class NewsCard extends StatelessWidget {
                             text: news.section,
                             fontSize: 12,
                             fontWeight: FontWeight.w600,
-                            // color: Colors.blue,
                             color: AppColors.badgeText,
                           ),
                         ),
@@ -123,7 +125,6 @@ class NewsCard extends StatelessWidget {
                       CustomText(
                         text: news.description,
                         fontSize: 14,
-                        // color: Colors.black87,
                         color: AppColors.bodyText,
                         maxLines: 2,
                       ),
