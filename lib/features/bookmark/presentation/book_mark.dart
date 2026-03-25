@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:p_papper/core/utils/custom_exception.dart';
+import 'package:p_papper/core/error/custom_exception.dart';
 import 'package:p_papper/core/utils/custom_text.dart';
 import 'package:p_papper/features/news/presentation/provider/bookmarks_stream_notfier_provider.dart';
 
@@ -35,10 +35,17 @@ class BookMark extends ConsumerWidget {
           );
         },
         error: (e, st) {
-          throw CustomException(
-            message: e.toString(),
-            code: 'error',
-            stackTrace: st,
+          final errorMessage = e is CustomException
+              ? e.message
+              : 'Something went wrong';
+
+          return Center(
+            child: CustomText(
+              text: errorMessage,
+              color: Colors.red,
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
+            ),
           );
         },
         loading: () => const CircularProgressIndicator(

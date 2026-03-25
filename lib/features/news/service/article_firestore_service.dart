@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:p_papper/core/utils/custom_exception.dart';
+import 'package:p_papper/core/error/custom_exception.dart';
 import 'package:p_papper/features/news/domain/article_model.dart';
 
 class ArticleFirestoreService {
