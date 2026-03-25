@@ -21,10 +21,11 @@ class ArticleFirestoreService {
           .collection('bookmarks')
           .doc(article.id)
           .set(data, SetOptions(merge: true));
-    } on FirebaseException catch (e) {
+    } on FirebaseException catch (e, st) {
       throw CustomException(
-        message: e.message.toString(),
+        message: e.message ?? 'Something went wrong',
         code: e.code,
+        stackTrace: st,
       );
     }
   }
@@ -45,10 +46,11 @@ class ArticleFirestoreService {
             (doc) => ArticleModel.fromFirestore(doc.data()),
           )
           .toList();
-    } on FirebaseException catch (e) {
+    } on FirebaseException catch (e, st) {
       throw CustomException(
         message: e.message.toString(),
         code: e.code,
+        stackTrace: st,
       );
     }
   }
@@ -69,13 +71,15 @@ class ArticleFirestoreService {
         throw CustomException(
           message: 'Article not found in the bookmarks',
           code: 'not-found',
+          stackTrace: StackTrace.current,
         );
       }
       await docRef.delete();
-    } on FirebaseException catch (e) {
+    } on FirebaseException catch (e, st) {
       throw CustomException(
         message: e.message.toString(),
         code: e.code,
+        stackTrace: st,
       );
     }
   }
