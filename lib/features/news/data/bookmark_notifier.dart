@@ -27,7 +27,6 @@ class BookmarkNotifier extends Notifier<Set<String>> {
   void toggleBookmarked(String articleId) {
     if (state.contains(articleId)) {
       state = state.where((id) => id != articleId).toSet();
-      state = state;
     } else {
       state = {...state, articleId};
     }

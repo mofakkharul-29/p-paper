@@ -14,9 +14,9 @@ class CustomBookmark extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final bookmarkStatus = ref.watch(
-      bookmarkNotifierProvider,
-    );
+    final isBookmarked = ref
+        .watch(bookmarkNotifierProvider)
+        .contains(currentArticle.id);
 
     return Positioned(
       top: 10,
@@ -35,7 +35,7 @@ class CustomBookmark extends ConsumerWidget {
           child: Padding(
             padding: EdgeInsets.all(6),
             child: Icon(
-              bookmarkStatus.contains(currentArticle.id)
+              isBookmarked
                   ? Icons.bookmark
                   : Icons.bookmark_border,
               color: Colors.amber,
