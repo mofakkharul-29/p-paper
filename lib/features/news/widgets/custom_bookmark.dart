@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:p_papper/features/auth/presentation/provider/auth_notifier_provider.dart';
 import 'package:p_papper/features/news/domain/article_model.dart';
-import 'package:p_papper/features/news/presentation/provider/bookmark_status_provider.dart';
+import 'package:p_papper/features/news/presentation/provider/article_firestore_service_provider.dart';
+import 'package:p_papper/features/news/presentation/provider/bookmarks_stream_notfier_provider.dart';
 
 class CustomBookmark extends ConsumerWidget {
   final ArticleModel currentArticle;
@@ -14,9 +16,21 @@ class CustomBookmark extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isBookmarked = ref
-        .watch(bookmarkNotifierProvider)
-        .contains(currentArticle.id);
+    final bookMark = ref.watch(
+      bookmarksStreamNotifierProvider,
+    );
+
+    final isBookmarked = bookMark.when(
+      data: (articles) =>
+          articles.any((a) => a.id == currentArticle.id),
+      error: (_, _) => false,
+      loading: () => false,
+    );
+
+    final userId = ref
+        .watch(authNotifierProvider)
+        .value
+        ?.uid;
 
     return Positioned(
       top: 10,
@@ -26,11 +40,33 @@ class CustomBookmark extends ConsumerWidget {
         borderRadius: BorderRadius.circular(20),
         child: InkWell(
           borderRadius: BorderRadius.circular(20),
-          onTap: () {
-            // 👉 later: save to firestore
-            ref
-                .read(bookmarkNotifierProvider.notifier)
-                .toggleBookmarked(currentArticle.id);
+          onTap: () async {
+            if (userId == null) return;
+
+            final firestore = ref.read(
+              articleFirestoreServicesProvider,
+            );
+
+            try {
+              if (isBookmarked) {
+                await firestore.deleteFromFirestore(
+                  userId,
+                  currentArticle.id,
+                );
+              } else {
+                await firestore.writeToFirestore(
+                  userId,
+                  currentArticle,
+                );
+              }
+            } catch (e) {
+              if (!context.mounted) return;
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Something went wrong'),
+                ),
+              );
+            }
           },
           child: Padding(
             padding: EdgeInsets.all(6),

@@ -6,7 +6,7 @@ import 'package:p_papper/core/routing/routing_refresh_listenable.dart';
 import 'package:p_papper/core/utils/page_transition.dart';
 import 'package:p_papper/features/auth/presentation/login_page.dart';
 import 'package:p_papper/features/auth/presentation/registration_page.dart';
-import 'package:p_papper/features/bookmark/book_mark.dart';
+import 'package:p_papper/features/bookmark/presentation/book_mark.dart';
 import 'package:p_papper/features/home/home.dart';
 import 'package:p_papper/features/news/news_screen.dart';
 import 'package:p_papper/features/news/widgets/article_webview_page.dart';

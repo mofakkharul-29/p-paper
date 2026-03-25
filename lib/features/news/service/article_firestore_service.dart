@@ -6,6 +6,10 @@ class ArticleFirestoreService {
   final FirebaseFirestore _firebaseFirestore =
       FirebaseFirestore.instance;
 
+  String _safeId(String id) {
+    return id.replaceAll('/', '_');
+  }
+
   Future<void> writeToFirestore(
     String userId,
     ArticleModel article,
@@ -19,7 +23,7 @@ class ArticleFirestoreService {
           .collection('users')
           .doc(userId)
           .collection('bookmarks')
-          .doc(article.id)
+          .doc(_safeId(article.id))
           .set(data, SetOptions(merge: true));
     } on FirebaseException catch (e, st) {
       throw CustomException(
@@ -55,6 +59,25 @@ class ArticleFirestoreService {
     }
   }
 
+  Stream<List<ArticleModel>> streamBookmarks(
+    String userId,
+  ) {
+    return _firebaseFirestore
+        .collection('users')
+        .doc(userId)
+        .collection('bookmarks')
+        .orderBy('savedAt', descending: true)
+        .snapshots()
+        .map(
+          (snapshot) => snapshot.docs
+              .map(
+                (doc) =>
+                    ArticleModel.fromFirestore(doc.data()),
+              )
+              .toList(),
+        );
+  }
+
   Future<void> deleteFromFirestore(
     String userId,
     String articleId,
@@ -64,7 +87,8 @@ class ArticleFirestoreService {
           .collection('users')
           .doc(userId)
           .collection('bookmarks')
-          .doc(articleId);
+          .doc(_safeId(articleId));
+
       final docSnapshot = await docRef.get();
 
       if (!docSnapshot.exists) {
@@ -74,6 +98,7 @@ class ArticleFirestoreService {
           stackTrace: StackTrace.current,
         );
       }
+
       await docRef.delete();
     } on FirebaseException catch (e, st) {
       throw CustomException(
