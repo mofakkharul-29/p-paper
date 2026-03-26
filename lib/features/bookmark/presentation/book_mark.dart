@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:p_papper/core/error/custom_exception.dart';
 import 'package:p_papper/core/utils/custom_text.dart';
 import 'package:p_papper/features/news/presentation/provider/bookmarks_stream_notfier_provider.dart';
+import 'package:p_papper/features/news/widgets/news_card.dart';
 
 class BookMark extends ConsumerWidget {
   const BookMark({super.key});
@@ -30,7 +31,11 @@ class BookMark extends ConsumerWidget {
           return ListView.builder(
             itemCount: articles.length,
             itemBuilder: (context, index) {
-              return Container();
+              final currentArticle = articles[index];
+              return NewsCard(
+                news: currentArticle,
+                isUsingAnotherFile: true,
+              );
             },
           );
         },

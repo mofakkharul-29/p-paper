@@ -7,11 +7,11 @@ import 'package:p_papper/features/news/presentation/provider/bookmarks_stream_no
 
 class CustomBookmark extends ConsumerWidget {
   final ArticleModel currentArticle;
-  final Function()? onTap;
+  final bool isUsingAnotherFile;
   const CustomBookmark({
     super.key,
-    required this.onTap,
     required this.currentArticle,
+    this.isUsingAnotherFile = false,
   });
 
   @override
@@ -40,44 +40,83 @@ class CustomBookmark extends ConsumerWidget {
         borderRadius: BorderRadius.circular(20),
         child: InkWell(
           borderRadius: BorderRadius.circular(20),
-          onTap: () async {
-            if (userId == null) return;
+          onTap: !isUsingAnotherFile
+              ? () async {
+                  if (userId == null) return;
 
-            final firestore = ref.read(
-              articleFirestoreServicesProvider,
-            );
+                  final firestore = ref.read(
+                    articleFirestoreServicesProvider,
+                  );
 
-            try {
-              if (isBookmarked) {
-                await firestore.deleteFromFirestore(
-                  userId,
-                  currentArticle.id,
-                );
-              } else {
-                await firestore.writeToFirestore(
-                  userId,
-                  currentArticle,
-                );
-              }
-            } catch (e) {
-              if (!context.mounted) return;
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Something went wrong'),
-                ),
-              );
-            }
-          },
+                  try {
+                    if (isBookmarked) {
+                      await firestore.deleteFromFirestore(
+                        userId,
+                        currentArticle.id,
+                      );
+                    } else {
+                      await firestore.writeToFirestore(
+                        userId,
+                        currentArticle,
+                      );
+                    }
+                  } catch (e) {
+                    if (!context.mounted) return;
+                    ScaffoldMessenger.of(
+                      context,
+                    ).showSnackBar(
+                      const SnackBar(
+                        content: Text(
+                          'Something went wrong',
+                        ),
+                      ),
+                    );
+                  }
+                }
+              : () async {
+                  if (userId == null) return;
+
+                  final firestore = ref.read(
+                    articleFirestoreServicesProvider,
+                  );
+
+                  try {
+                    if (isBookmarked) {
+                      await firestore.deleteFromFirestore(
+                        userId,
+                        currentArticle.id,
+                      );
+                    }
+                  } catch (e) {
+                    if (!context.mounted) return;
+                    ScaffoldMessenger.of(
+                      context,
+                    ).showSnackBar(
+                      const SnackBar(
+                        content: Text(
+                          'Something went wrong',
+                        ),
+                      ),
+                    );
+                  }
+                },
           child: Padding(
-            padding: EdgeInsets.all(6),
-            child: Icon(
-              isBookmarked
-                  ? Icons.bookmark
-                  : Icons.bookmark_border,
-              color: Colors.amber,
-              fontWeight: FontWeight.w700,
-              size: 20,
-            ),
+            padding: const EdgeInsets.all(6),
+            child: isUsingAnotherFile
+                ? const Icon(
+                    Icons.delete,
+                    color: Colors.amber,
+                    fontWeight: FontWeight.w700,
+                    size: 20,
+                  )
+                : Icon(
+                    isBookmarked
+                        ? Icons.bookmark
+                        : Icons.bookmark_border,
+                    color: Colors.amber,
+                    fontWeight: FontWeight.w700,
+                    size: 20,
+                  ),
           ),
         ),
       ),

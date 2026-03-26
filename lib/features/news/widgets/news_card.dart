@@ -8,8 +8,13 @@ import 'package:p_papper/features/news/widgets/custom_bookmark.dart';
 
 class NewsCard extends StatelessWidget {
   final ArticleModel news;
+  final bool isUsingAnotherFile;
 
-  const NewsCard({super.key, required this.news});
+  const NewsCard({
+    super.key,
+    required this.news,
+    this.isUsingAnotherFile = false,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +76,7 @@ class NewsCard extends StatelessWidget {
                   ),
                   CustomBookmark(
                     currentArticle: news,
-                    onTap: () {},
+                    isUsingAnotherFile: isUsingAnotherFile,
                   ),
                 ],
               ),
