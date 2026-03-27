@@ -11,7 +11,7 @@ import 'package:p_papper/features/home/home.dart';
 import 'package:p_papper/features/news/news_screen.dart';
 import 'package:p_papper/features/news/widgets/article_webview_page.dart';
 import 'package:p_papper/features/onboarding/presentation/onboarding_screen.dart';
-import 'package:p_papper/features/profile/profile.dart';
+import 'package:p_papper/features/profile/presentation/profile.dart';
 import 'package:p_papper/features/splash/presentation/splash_screen.dart';
 
 class RouterConfiguration {

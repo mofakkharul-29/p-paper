@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:p_papper/core/constant/app_colors.dart';
 import 'package:p_papper/core/utils/custom_text.dart';
+import 'package:p_papper/features/auth/presentation/provider/auth_notifier_provider.dart';
 import 'package:p_papper/features/news/domain/article_model.dart';
+import 'package:p_papper/features/news/presentation/provider/article_firestore_service_provider.dart';
 import 'package:p_papper/features/news/widgets/custom_bookmark.dart';
 
-class NewsCard extends StatelessWidget {
+class NewsCard extends ConsumerWidget {
   final ArticleModel news;
   final bool isUsingAnotherFile;
 
@@ -17,7 +20,7 @@ class NewsCard extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final formattedDate = DateFormat.yMMMd().format(
       news.publishedAt,
     );
@@ -25,7 +28,26 @@ class NewsCard extends StatelessWidget {
     return Material(
       color: Colors.transparent,
       child: InkWell(
-        onTap: () {
+        onTap: () async {
+          final userId = ref
+              .read(authNotifierProvider)
+              .value
+              ?.uid;
+          final articleService = ref.read(
+            articleFirestoreServicesProvider,
+          );
+
+          if (userId != null) {
+            articleService
+                .openArticle(userId, news.id)
+                .catchError((e) {
+                  debugPrint(
+                    'Failed to log opened article: $e',
+                  );
+                });
+          }
+
+          if (!context.mounted) return;
           context.pushNamed(
             'article',
             extra: {

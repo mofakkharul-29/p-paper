@@ -59,6 +59,44 @@ class ArticleFirestoreService {
     }
   }
 
+  Future<void> openArticle(
+    String userId,
+    String articleId,
+  ) async {
+    final safeId = articleId.replaceAll('/', '_');
+    try {
+      await _firebaseFirestore
+          .collection('users')
+          .doc(userId)
+          .collection('openArticles')
+          .doc(safeId)
+          .set({
+            'articleId': articleId,
+            'openedAt': FieldValue.serverTimestamp(),
+          }, SetOptions(merge: true));
+    } on FirebaseException catch (e, st) {
+      throw CustomException(
+        message: e.message ?? 'Something went wrong',
+        code: e.code,
+        stackTrace: st,
+      );
+    }
+  }
+
+  Stream<List<String>> openedArticles({
+    required String userId,
+  }) {
+    return _firebaseFirestore
+        .collection('users')
+        .doc(userId)
+        .collection('openArticles')
+        .snapshots()
+        .map(
+          (snapshot) =>
+              snapshot.docs.map((doc) => doc.id).toList(),
+        );
+  }
+
   Stream<List<ArticleModel>> streamBookmarks(
     String userId,
   ) {
