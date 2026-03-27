@@ -12,7 +12,7 @@ import 'package:p_papper/features/profile/widget/state_item.dart';
 
 class Profile extends ConsumerWidget {
   const Profile({super.key});
-
+  // handle the logout properly search for professional appraoch
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final user = ref.watch(authNotifierProvider);
@@ -26,13 +26,14 @@ class Profile extends ConsumerWidget {
       bookmarksList = value;
     });
 
-    final openArticlesList = ref.watch(
-      openedArticlesProvider(user.value!.uid),
-    );
-
     return SafeArea(
       child: user.when(
         data: (user) {
+          if (user == null) return const SizedBox.shrink();
+
+          final openArticlesList = ref.watch(
+            openedArticlesProvider(user.uid),
+          );
           return Scaffold(
             backgroundColor: const Color.fromARGB(
               255,
@@ -48,7 +49,7 @@ class Profile extends ConsumerWidget {
                   backgroundColor: Colors.black,
                   flexibleSpace: FlexibleSpaceBar(
                     title: CustomText(
-                      text: 'Hi ${user!.name ?? 'Guest'} !',
+                      text: 'Hi ${user.name ?? 'Guest'} !',
                       color: Colors.white70,
                     ),
                     centerTitle: true,
@@ -250,9 +251,20 @@ class Profile extends ConsumerWidget {
                     ),
                     child: SizedBox(
                       width: double.infinity,
-                      child: ElevatedButton(
+                      child: ElevatedButton.icon(
                         onPressed: () =>
                             showLogoutDialog(context, ref),
+                        icon: const Icon(
+                          Icons.logout_rounded,
+                          size: 18,
+                        ),
+                        label: const Text(
+                          'Logout',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.black,
                           foregroundColor: Colors.white,
@@ -266,13 +278,13 @@ class Profile extends ConsumerWidget {
                                 BorderRadius.circular(30),
                           ),
                         ),
-                        child: const Text(
-                          'Logout',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
+                        // child: const Text(
+                        //   'Logout',
+                        //   style: TextStyle(
+                        //     fontSize: 16,
+                        //     fontWeight: FontWeight.w600,
+                        //   ),
+                        // ),
                       ),
                     ),
                   ),
