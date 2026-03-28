@@ -278,13 +278,6 @@ class Profile extends ConsumerWidget {
                                 BorderRadius.circular(30),
                           ),
                         ),
-                        // child: const Text(
-                        //   'Logout',
-                        //   style: TextStyle(
-                        //     fontSize: 16,
-                        //     fontWeight: FontWeight.w600,
-                        //   ),
-                        // ),
                       ),
                     ),
                   ),
