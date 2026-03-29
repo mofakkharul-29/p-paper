@@ -10,11 +10,16 @@ class NewsService {
 
   Future<List<ArticleModel>> fetchNews({
     int page = 1,
+    String? query,
   }) async {
     try {
       final response = await dio.get(
         '/search',
-        queryParameters: {'page': page, 'page-size': 10},
+        queryParameters: {
+          'page': page,
+          'page-size': 10,
+          if (query != null && query.isNotEmpty) 'q': query,
+        },
       );
       final results =
           response.data['response']['results'] as List;

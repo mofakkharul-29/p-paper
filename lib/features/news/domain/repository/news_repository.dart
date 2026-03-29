@@ -6,7 +6,13 @@ class NewsRepository {
 
   NewsRepository(this.service);
 
-  Future<List<ArticleModel>> getNews(int page) async {
-    return await service.fetchNews(page: page);
+  Future<List<ArticleModel>> getNews({
+    int page = 1,
+    String? query,
+  }) async {
+    return await service.fetchNews(
+      page: page,
+      query: query,
+    );
   }
 }

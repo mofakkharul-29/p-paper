@@ -16,6 +16,7 @@ class NewsScreen extends ConsumerStatefulWidget {
 class _NewsScreenState extends ConsumerState<NewsScreen> {
   final ScrollController _scrollController =
       ScrollController();
+  final FocusNode _focusNode = FocusNode();
 
   @override
   void initState() {
@@ -52,6 +53,7 @@ class _NewsScreenState extends ConsumerState<NewsScreen> {
   @override
   void dispose() {
     _scrollController.dispose();
+    _focusNode.dispose();
     super.dispose();
   }
 
@@ -77,31 +79,77 @@ class _NewsScreenState extends ConsumerState<NewsScreen> {
       );
     }
 
-    return RefreshIndicator(
-      onRefresh: _onRefresh,
-      color: AppColors.refreshForeground,
-      backgroundColor: AppColors.refreshBackground,
-      child: ListView.builder(
-        controller: _scrollController,
-        itemCount:
-            state.articles.length +
-            (state.isLoading ? 1 : 0),
-        itemBuilder: (context, index) {
-          if (index < state.articles.length) {
-            final ArticleModel article =
-                state.articles[index];
-            return NewsCard(news: article);
-          }
-
-          return const Padding(
-            padding: EdgeInsets.all(16.0),
-            child: Center(
-              child: CircularProgressIndicator(
-                color: AppColors.spinnerColor,
-              ),
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(12),
+          child: TextField(
+            focusNode: _focusNode,
+            textInputAction: TextInputAction.done,
+            onTapOutside: (event) {
+              _focusNode.unfocus();
+            },
+            style: TextStyle(
+              color: Colors.black87,
+              fontWeight: FontWeight.w600,
+              fontSize: 17,
             ),
-          );
-        },
+            onChanged: (value) {
+              ref
+                  .read(newsNotifierProvider.notifier)
+                  .onSearchChanged(value);
+            },
+            decoration: _inputDecoration(),
+          ),
+        ),
+
+        Expanded(
+          child: RefreshIndicator(
+            onRefresh: _onRefresh,
+            color: AppColors.refreshForeground,
+            backgroundColor: AppColors.refreshBackground,
+            child: ListView.builder(
+              controller: _scrollController,
+              itemCount:
+                  state.articles.length +
+                  (state.isLoading ? 1 : 0),
+              itemBuilder: (context, index) {
+                if (index < state.articles.length) {
+                  final ArticleModel article =
+                      state.articles[index];
+                  return NewsCard(news: article);
+                }
+
+                return const Padding(
+                  padding: EdgeInsets.all(16.0),
+                  child: Center(
+                    child: CircularProgressIndicator(
+                      color: AppColors.spinnerColor,
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  InputDecoration? _inputDecoration() {
+    return InputDecoration(
+      hintText: 'Search news...',
+      hintStyle: TextStyle(color: Colors.black87),
+      focusedBorder: OutlineInputBorder(
+        borderSide: BorderSide(color: Colors.black87),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      prefixIcon: const Icon(
+        Icons.search,
+        color: Colors.black87,
+      ),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
       ),
     );
   }

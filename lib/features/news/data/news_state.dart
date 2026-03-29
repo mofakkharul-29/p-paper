@@ -6,6 +6,7 @@ class NewsState {
   final int page;
   final String? error;
   final bool hasMore;
+  final String searchQuery;
 
   NewsState({
     this.articles = const [],
@@ -13,6 +14,7 @@ class NewsState {
     this.page = 1,
     this.error,
     this.hasMore = true,
+    this.searchQuery = '',
   });
 
   NewsState copyWith({
@@ -21,6 +23,7 @@ class NewsState {
     int? page,
     String? error,
     bool? hasMore,
+    String? searchQuery,
   }) {
     return NewsState(
       articles: articles ?? this.articles,
@@ -28,6 +31,7 @@ class NewsState {
       page: page ?? this.page,
       error: error,
       hasMore: hasMore ?? this.hasMore,
+      searchQuery: searchQuery ?? this.searchQuery,
     );
   }
 }
