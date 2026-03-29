@@ -14,9 +14,8 @@ class ArticleFirestoreService {
     String userId,
     ArticleModel article,
   ) async {
-    final data = article
-        .copyWith(savedAt: DateTime.now())
-        .toMap();
+    final data = article.toMap();
+    data['savedAt'] = FieldValue.serverTimestamp();
 
     try {
       await _firebaseFirestore

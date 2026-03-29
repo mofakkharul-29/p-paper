@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class ArticleModel {
   final String id;
   final String title;
@@ -76,6 +78,16 @@ class ArticleModel {
   factory ArticleModel.fromFirestore(
     Map<String, dynamic> json,
   ) {
+    DateTime? parseTimestamp(dynamic value) {
+      if (value == null) return null;
+
+      if (value is DateTime) return value;
+
+      if (value is Timestamp) return value.toDate();
+
+      return null;
+    }
+
     return ArticleModel(
       id: json['id'] ?? '',
       title: json['title'] ?? '',
@@ -83,11 +95,12 @@ class ArticleModel {
       imageUrl: json['imageUrl'] ?? '',
       webUrl: json['webUrl'] ?? '',
       section: json['section'] ?? '',
-      publishedAt: (json['publishedAt'] as dynamic)
-          .toDate(),
-      savedAt: json['savedAt'] != null
-          ? (json['savedAt'] as dynamic).toDate()
-          : null,
+      publishedAt:
+          parseTimestamp(json['publishedAt']) ??
+          DateTime.now(),
+      savedAt:
+          parseTimestamp(json['savedAt']) ??
+          DateTime.fromMillisecondsSinceEpoch(0),
     );
   }
 }

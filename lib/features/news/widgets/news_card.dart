@@ -87,40 +87,38 @@ class NewsCard extends ConsumerWidget {
                         const BorderRadius.vertical(
                           top: Radius.circular(12),
                         ),
-                    // child: news.imageUrl.isNotEmpty
-                    // ? Image.network(
-                    //     news.imageUrl,
-                    //     height: 180,
-                    //     width: double.infinity,
-                    //     fit: BoxFit.cover,
-                    //     errorBuilder: (_, _, _) =>
-                    //         _buildPlaceholder(),
-                    //   )
-                    // : _buildPlaceholder(),
-                    child: CachedNetworkImage(
-                      imageUrl: news.imageUrl,
-                      cacheManager:
-                          CustomCacheManager.instance,
-                      height: 180,
-                      width: double.infinity,
-                      fit: BoxFit.cover,
-                      placeholder: (context, url) =>
-                          Container(
+                    child: news.imageUrl.isNotEmpty
+                        ? CachedNetworkImage(
+                            imageUrl: news.imageUrl,
+                            fadeInDuration: const Duration(
+                              milliseconds: 300,
+                            ),
+                            memCacheWidth: 600,
+                            cacheManager:
+                                CustomCacheManager.instance,
                             height: 180,
                             width: double.infinity,
-                            color: AppColors.placeholderBg,
-                            child: const Center(
-                              child:
-                                  CircularProgressIndicator(
-                                    strokeWidth: 2,
-                                    color: AppColors
-                                        .spinnerColor,
+                            fit: BoxFit.cover,
+                            placeholder: (context, url) =>
+                                Container(
+                                  height: 180,
+                                  width: double.infinity,
+                                  color: AppColors
+                                      .placeholderBg,
+                                  child: const Center(
+                                    child:
+                                        CircularProgressIndicator(
+                                          strokeWidth: 2,
+                                          color: AppColors
+                                              .spinnerColor,
+                                        ),
                                   ),
-                            ),
-                          ),
-                      errorWidget: (context, url, error) =>
-                          _buildPlaceholder(),
-                    ),
+                                ),
+                            errorWidget:
+                                (context, url, error) =>
+                                    _buildPlaceholder(),
+                          )
+                        : _buildPlaceholder(),
                   ),
                   CustomBookmark(
                     currentArticle: news,
