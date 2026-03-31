@@ -18,10 +18,12 @@ class BookMark extends ConsumerWidget {
       child: bookmarks.when(
         data: (articles) {
           if (articles.isEmpty) {
-            return const Center(
+            return Center(
               child: CustomText(
                 text: 'No item added yet !',
-                color: Colors.black87,
+                color: Theme.of(
+                  context,
+                ).textTheme.bodyMedium?.color,
                 fontSize: 15,
                 fontWeight: FontWeight.w600,
               ),

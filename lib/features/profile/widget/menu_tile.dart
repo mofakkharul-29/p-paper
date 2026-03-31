@@ -15,11 +15,15 @@ class MenuTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: Icon(icon),
-      title: Text(title),
+      leading: Icon(icon, color: Colors.black87),
+      title: Text(
+        title,
+        style: const TextStyle(color: Colors.black87),
+      ),
       trailing: const Icon(
         Icons.arrow_forward_ios,
         size: 16,
+        color: Colors.black87,
       ),
       onTap: onTap,
     );

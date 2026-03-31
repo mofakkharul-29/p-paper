@@ -62,8 +62,10 @@ class _NewsScreenState extends ConsumerState<NewsScreen> {
     final state = ref.watch(newsNotifierProvider);
 
     if (state.isLoading && state.articles.isEmpty) {
-      return const Scaffold(
-        backgroundColor: AppColors.scaffoldBgColor,
+      return Scaffold(
+        backgroundColor: Theme.of(
+          context,
+        ).scaffoldBackgroundColor,
         body: Center(
           child: CircularProgressIndicator(
             color: AppColors.spinnerColor,
@@ -74,7 +76,9 @@ class _NewsScreenState extends ConsumerState<NewsScreen> {
 
     if (state.error != null && state.articles.isEmpty) {
       return Scaffold(
-        backgroundColor: AppColors.screenBackground,
+        backgroundColor: Theme.of(
+          context,
+        ).scaffoldBackgroundColor,
         body: Center(child: Text(state.error!)),
       );
     }
@@ -90,9 +94,11 @@ class _NewsScreenState extends ConsumerState<NewsScreen> {
               _focusNode.unfocus();
             },
             style: TextStyle(
-              color: Colors.black87,
+              color: Theme.of(
+                context,
+              ).textTheme.bodyMedium?.color,
               fontWeight: FontWeight.w600,
-              fontSize: 17,
+              fontSize: 16,
             ),
             onChanged: (value) {
               ref
@@ -139,14 +145,24 @@ class _NewsScreenState extends ConsumerState<NewsScreen> {
   InputDecoration? _inputDecoration() {
     return InputDecoration(
       hintText: 'Search news...',
-      hintStyle: TextStyle(color: Colors.black87),
+      hintStyle: TextStyle(
+        color: Theme.of(context).textTheme.bodySmall?.color,
+      ),
       focusedBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: Colors.black87),
+        borderSide: BorderSide(
+          color:
+              Theme.of(
+                context,
+              ).textTheme.bodyMedium?.color ??
+              Colors.white,
+        ),
         borderRadius: BorderRadius.circular(12),
       ),
-      prefixIcon: const Icon(
+      prefixIcon: Icon(
         Icons.search,
-        color: Colors.black87,
+        color: Theme.of(
+          context,
+        ).textTheme.bodyMedium?.color,
       ),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),

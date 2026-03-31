@@ -14,16 +14,24 @@ class BodyContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark =
+        Theme.of(context).brightness == Brightness.dark;
+
     return Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: begin,
           end: end,
-          colors: [
-            gradientStart,
-            gradientMiddle,
-            gradientEnd,
-          ],
+          colors: isDark
+              ? [
+                  const Color(0xFF1E1E1E),
+                  const Color(0xFF121212),
+                ]
+              : [
+                  gradientStart,
+                  gradientMiddle,
+                  gradientEnd,
+                ],
         ),
       ),
       child: SafeArea(child: child),

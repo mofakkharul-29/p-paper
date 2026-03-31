@@ -27,6 +27,9 @@ class NewsCard extends ConsumerWidget {
       news.publishedAt,
     );
 
+    final isDark =
+        Theme.of(context).brightness == Brightness.dark;
+
     return Material(
       color: Colors.transparent,
       child: InkWell(
@@ -64,7 +67,7 @@ class NewsCard extends ConsumerWidget {
             vertical: 8,
           ),
           decoration: BoxDecoration(
-            color: AppColors.cardSurface,
+            color: Theme.of(context).cardColor,
             borderRadius: BorderRadius.circular(12),
             boxShadow: [
               BoxShadow(
@@ -141,8 +144,11 @@ class NewsCard extends ConsumerWidget {
                                 vertical: 3,
                               ),
                           decoration: BoxDecoration(
-                            color:
-                                AppColors.badgeBackground,
+                            color: isDark
+                                ? Theme.of(
+                                    context,
+                                  ).splashColor
+                                : AppColors.badgeBackground,
                             borderRadius:
                                 BorderRadius.circular(6),
                           ),
@@ -150,14 +156,24 @@ class NewsCard extends ConsumerWidget {
                             text: news.section,
                             fontSize: 12,
                             fontWeight: FontWeight.w600,
-                            color: AppColors.badgeText,
+                            color: isDark
+                                ? Theme.of(context)
+                                      .textTheme
+                                      .bodySmall
+                                      ?.color
+                                : AppColors.badgeText,
                           ),
                         ),
                         const SizedBox(width: 8),
                         CustomText(
                           text: formattedDate,
                           fontSize: 12,
-                          color: AppColors.dateText,
+                          color: isDark
+                              ? Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium
+                                    ?.color
+                              : AppColors.dateText,
                         ),
                       ],
                     ),
@@ -168,7 +184,9 @@ class NewsCard extends ConsumerWidget {
                       fontSize: 16,
                       fontWeight: FontWeight.w700,
                       maxLines: 2,
-                      color: AppColors.titleText,
+                      color: Theme.of(
+                        context,
+                      ).textTheme.bodyLarge?.color,
                     ),
 
                     const SizedBox(height: 6),
@@ -176,7 +194,11 @@ class NewsCard extends ConsumerWidget {
                       CustomText(
                         text: news.description,
                         fontSize: 14,
-                        color: AppColors.bodyText,
+                        color: isDark
+                            ? Theme.of(
+                                context,
+                              ).textTheme.labelSmall?.color
+                            : AppColors.bodyText,
                         maxLines: 2,
                       ),
                   ],

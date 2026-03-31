@@ -47,7 +47,10 @@ class _ArticleWebviewPageState
 
   @override
   Widget build(BuildContext context) {
-    final appBar = CustomAppBar(title: widget.title);
+    final appBar = CustomAppBar(
+      title: widget.title,
+      context: context,
+    );
 
     return Scaffold(
       appBar: appBar.customAppbar,

@@ -19,9 +19,13 @@ class StatItem extends StatelessWidget {
           style: const TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,
+            color: Colors.black87,
           ),
         ),
-        Text(title),
+        Text(
+          title,
+          style: const TextStyle(color: Colors.black87),
+        ),
       ],
     );
   }

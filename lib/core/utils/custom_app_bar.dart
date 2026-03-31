@@ -1,20 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:p_papper/core/constant/app_colors.dart';
 import 'package:p_papper/core/utils/custom_text.dart';
 
 class CustomAppBar {
   final String title;
+  final BuildContext context;
 
-  const CustomAppBar({this.title = ''});
+  const CustomAppBar({
+    this.title = '',
+    required this.context,
+  });
 
   PreferredSizeWidget? _customAppBar(String title) {
     return PreferredSize(
       preferredSize: const Size.fromHeight(40),
       child: AppBar(
-        backgroundColor: AppColors.appBarBgColor,
+        backgroundColor: Colors.transparent,
         title: CustomText(
           text: title,
-          color: Colors.black87,
+          color: Theme.of(
+            context,
+          ).textTheme.bodyLarge?.color,
           fontWeight: FontWeight.w700,
           fontSize: 20,
         ),

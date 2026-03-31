@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:p_papper/core/constant/theme.dart';
 import 'package:p_papper/core/utils/custom_text.dart';
 import 'package:p_papper/features/auth/presentation/provider/auth_notifier_provider.dart';
 import 'package:p_papper/features/news/domain/article_model.dart';
@@ -12,10 +13,11 @@ import 'package:p_papper/features/profile/widget/state_item.dart';
 
 class Profile extends ConsumerWidget {
   const Profile({super.key});
-  // handle the logout properly search for professional appraoch
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final user = ref.watch(authNotifierProvider);
+    final isDark =
+        Theme.of(context).brightness == Brightness.dark;
 
     List<ArticleModel> bookmarksList = [];
     final bookmarks = ref.watch(
@@ -35,22 +37,25 @@ class Profile extends ConsumerWidget {
             openedArticlesProvider(user.uid),
           );
           return Scaffold(
-            backgroundColor: const Color.fromARGB(
-              255,
-              192,
-              192,
-              192,
-            ),
+            backgroundColor: Theme.of(
+              context,
+            ).scaffoldBackgroundColor,
             body: CustomScrollView(
               slivers: [
                 SliverAppBar(
                   expandedHeight: 220,
                   pinned: true,
-                  backgroundColor: Colors.black,
+                  backgroundColor: Theme.of(
+                    context,
+                  ).scaffoldBackgroundColor,
                   flexibleSpace: FlexibleSpaceBar(
                     title: CustomText(
                       text: 'Hi ${user.name ?? 'Guest'} !',
-                      color: Colors.white70,
+                      color: isDark
+                          ? Theme.of(
+                              context,
+                            ).textTheme.bodyMedium?.color
+                          : Colors.white60,
                     ),
                     centerTitle: true,
                     background: Container(
@@ -67,8 +72,13 @@ class Profile extends ConsumerWidget {
                       child: Center(
                         child: CircleAvatar(
                           radius: 48,
-                          backgroundColor: Colors.white,
+                          backgroundColor: Theme.of(
+                            context,
+                          ).scaffoldBackgroundColor,
                           child: CircleAvatar(
+                            backgroundColor: isDark
+                                ? Colors.white54
+                                : Colors.transparent,
                             radius: 45,
                             backgroundImage:
                                 (user.photoUrl != null &&
@@ -82,10 +92,10 @@ class Profile extends ConsumerWidget {
                             child:
                                 (user.photoUrl == null ||
                                     user.photoUrl!.isEmpty)
-                                ? const Icon(
+                                ? Icon(
                                     Icons.person,
                                     size: 40,
-                                    color: Colors.grey,
+                                    color: Colors.black87,
                                   )
                                 : null,
                           ),
@@ -118,13 +128,19 @@ class Profile extends ConsumerWidget {
                             text: user.name ?? 'Unknown',
                             fontSize: 22,
                             fontWeight: FontWeight.bold,
-                            color: Colors.black87,
+                            // color: Colors.black87,
+                            color: isDark
+                                ? Colors.black87
+                                : Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium
+                                      ?.color,
                           ),
                           const SizedBox(height: 4),
                           CustomText(
                             text: user.email,
                             fontSize: 14,
-                            color: Colors.black54,
+                            color: Colors.black87,
                           ),
                           const SizedBox(height: 16),
 
@@ -232,10 +248,54 @@ class Profile extends ConsumerWidget {
                             title: 'Settings',
                             onTap: () {},
                           ),
-                          MenuTile(
-                            icon: Icons.dark_mode,
-                            title: 'Dark Mode',
-                            onTap: () {},
+                          Consumer(
+                            builder: (context, ref, _) {
+                              final themeMode = ref.watch(
+                                themeNotifierProvider,
+                              );
+                              final isDark =
+                                  themeMode ==
+                                  ThemeMode.dark;
+
+                              return AnimatedContainer(
+                                duration: const Duration(
+                                  milliseconds: 300,
+                                ),
+                                curve: Curves.easeInOut,
+                                decoration: BoxDecoration(
+                                  borderRadius:
+                                      BorderRadius.circular(
+                                        16,
+                                      ),
+                                ),
+                                child: SwitchListTile(
+                                  activeTrackColor:
+                                      Colors.black54,
+                                  activeThumbColor:
+                                      Colors.black87,
+
+                                  contentPadding:
+                                      const EdgeInsets.symmetric(
+                                        horizontal: 16,
+                                      ),
+                                  secondary: const Icon(
+                                    Icons.dark_mode,
+                                  ),
+                                  title: const Text(
+                                    'Dark Mode',
+                                  ),
+                                  value: isDark,
+                                  onChanged: (value) {
+                                    ref
+                                        .read(
+                                          themeNotifierProvider
+                                              .notifier,
+                                        )
+                                        .toggleTheme(value);
+                                  },
+                                ),
+                              );
+                            },
                           ),
                         ],
                       ),
@@ -266,7 +326,9 @@ class Profile extends ConsumerWidget {
                           ),
                         ),
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.black,
+                          backgroundColor: isDark
+                              ? Colors.blueAccent
+                              : Colors.black,
                           foregroundColor: Colors.white,
                           elevation: 0,
                           padding:

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:p_papper/core/constant/app_colors.dart';
 
 class CustomBottomNavBar extends StatelessWidget {
   final StatefulNavigationShell navigationShell;
@@ -12,6 +11,7 @@ class CustomBottomNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
+
     return SizedBox(
       height: screenHeight * 0.08,
       child: BottomNavigationBar(
@@ -23,25 +23,24 @@ class CustomBottomNavBar extends StatelessWidget {
                 value == navigationShell.currentIndex,
           );
         },
-        backgroundColor: AppColors.appBarBgColor,
-        selectedItemColor: const Color.fromRGBO(
-          0,
-          0,
-          0,
-          0.867,
-        ),
-        unselectedItemColor: const Color.fromRGBO(
-          0,
-          0,
-          0,
-          0.867,
-        ),
+        backgroundColor:
+            Theme.of(
+              context,
+            ).bottomNavigationBarTheme.backgroundColor ??
+            Theme.of(context).scaffoldBackgroundColor,
+        selectedItemColor: Theme.of(
+          context,
+        ).bottomNavigationBarTheme.selectedItemColor,
+        unselectedItemColor: Theme.of(
+          context,
+        ).bottomNavigationBarTheme.unselectedItemColor,
         iconSize: 20,
         selectedLabelStyle: const TextStyle(
           fontWeight: FontWeight.w800,
           fontSize: 12,
         ),
         unselectedLabelStyle: const TextStyle(fontSize: 12),
+        type: BottomNavigationBarType.fixed,
         items: [
           _bottomNavigationBarItem(
             label: 'News',

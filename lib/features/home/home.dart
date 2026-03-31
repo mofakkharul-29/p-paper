@@ -15,9 +15,15 @@ class Home extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final appBar = CustomAppBar(title: setTitle(path));
+    final appBar = CustomAppBar(
+      title: setTitle(path),
+      context: context,
+    );
 
     return Scaffold(
+      backgroundColor: Theme.of(
+        context,
+      ).scaffoldBackgroundColor,
       appBar: appBar.customAppbar,
       body: BodyContainer(child: navigationShell),
       bottomNavigationBar: CustomBottomNavBar(
