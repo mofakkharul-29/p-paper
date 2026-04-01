@@ -9,6 +9,7 @@ import 'package:p_papper/features/news/presentation/provider/bookmarks_stream_no
 import 'package:p_papper/features/news/presentation/provider/open_article_provider.dart';
 import 'package:p_papper/features/profile/widget/logout_dialog.dart';
 import 'package:p_papper/features/profile/widget/menu_tile.dart';
+import 'package:p_papper/features/profile/widget/progress_indicatior.dart';
 import 'package:p_papper/features/profile/widget/state_item.dart';
 
 class Profile extends ConsumerWidget {
@@ -356,11 +357,7 @@ class Profile extends ConsumerWidget {
           );
         },
         loading: () => const Scaffold(
-          body: Center(
-            child: CircularProgressIndicator(
-              color: Colors.black54,
-            ),
-          ),
+          body: Center(child: ProgressIndicatior()),
         ),
       ),
     );
