@@ -83,37 +83,36 @@ class _NewsScreenState extends ConsumerState<NewsScreen> {
       );
     }
 
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(12),
-          child: TextField(
-            focusNode: _focusNode,
-            textInputAction: TextInputAction.done,
-            onTapOutside: (event) {
-              _focusNode.unfocus();
-            },
-            style: TextStyle(
-              color: Theme.of(
-                context,
-              ).textTheme.bodyMedium?.color,
-              fontWeight: FontWeight.w600,
-              fontSize: 16,
+    return RefreshIndicator(
+      onRefresh: _onRefresh,
+      color: AppColors.refreshForeground,
+      backgroundColor: AppColors.refreshBackground,
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(12),
+            child: TextField(
+              focusNode: _focusNode,
+              textInputAction: TextInputAction.done,
+              onTapOutside: (event) {
+                _focusNode.unfocus();
+              },
+              style: TextStyle(
+                color: Theme.of(
+                  context,
+                ).textTheme.bodyMedium?.color,
+                fontWeight: FontWeight.w600,
+                fontSize: 16,
+              ),
+              onChanged: (value) {
+                ref
+                    .read(newsNotifierProvider.notifier)
+                    .onSearchChanged(value);
+              },
+              decoration: _inputDecoration(),
             ),
-            onChanged: (value) {
-              ref
-                  .read(newsNotifierProvider.notifier)
-                  .onSearchChanged(value);
-            },
-            decoration: _inputDecoration(),
           ),
-        ),
-
-        Expanded(
-          child: RefreshIndicator(
-            onRefresh: _onRefresh,
-            color: AppColors.refreshForeground,
-            backgroundColor: AppColors.refreshBackground,
+          Expanded(
             child: ListView.builder(
               controller: _scrollController,
               itemCount:
@@ -137,8 +136,8 @@ class _NewsScreenState extends ConsumerState<NewsScreen> {
               },
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
