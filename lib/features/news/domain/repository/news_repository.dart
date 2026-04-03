@@ -9,10 +9,12 @@ class NewsRepository {
   Future<List<ArticleModel>> getNews({
     int page = 1,
     String? query,
+    String? section,
   }) async {
     return await service.fetchNews(
       page: page,
       query: query,
+      section: section,
     );
   }
 }

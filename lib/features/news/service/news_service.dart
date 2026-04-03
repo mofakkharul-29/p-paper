@@ -11,6 +11,7 @@ class NewsService {
   Future<List<ArticleModel>> fetchNews({
     int page = 1,
     String? query,
+    String? section,
   }) async {
     try {
       final response = await dio.get(
@@ -19,6 +20,8 @@ class NewsService {
           'page': page,
           'page-size': 10,
           if (query != null && query.isNotEmpty) 'q': query,
+          if (section != null && section.isNotEmpty) 
+            'section': section,
         },
       );
       final results =

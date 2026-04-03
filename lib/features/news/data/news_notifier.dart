@@ -41,6 +41,9 @@ class NewsNotifier extends Notifier<NewsState> {
           .getNews(
             page: nextPage,
             query: state.searchQuery,
+            section: state.selectedSection == 'all'
+                ? null
+                : state.selectedSection,
           );
       state = state.copyWith(
         articles: loadMore
@@ -57,5 +60,15 @@ class NewsNotifier extends Notifier<NewsState> {
         error: e.toString(),
       );
     }
+  }
+
+  void onSectionChanged(String section) {
+    state = state.copyWith(
+      selectedSection: section,
+      page: 1,
+      articles: [],
+      hasMore: true,
+    );
+    fetchNews();
   }
 }

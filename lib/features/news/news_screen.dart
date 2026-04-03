@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:p_papper/core/constant/app_colors.dart';
 import 'package:p_papper/features/news/domain/article_model.dart';
 import 'package:p_papper/features/news/presentation/provider/news_notifier_provoder.dart';
+import 'package:p_papper/features/news/widgets/category_section.dart';
 import 'package:p_papper/features/news/widgets/news_card.dart';
 
 class NewsScreen extends ConsumerStatefulWidget {
@@ -90,7 +91,10 @@ class _NewsScreenState extends ConsumerState<NewsScreen> {
       child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.all(12),
+            padding: const EdgeInsets.symmetric(
+              horizontal: 12,
+              vertical: 5,
+            ),
             child: TextField(
               focusNode: _focusNode,
               textInputAction: TextInputAction.done,
@@ -112,6 +116,8 @@ class _NewsScreenState extends ConsumerState<NewsScreen> {
               decoration: _inputDecoration(),
             ),
           ),
+          const CategorySection(),
+          const SizedBox(height: 5),
           Expanded(
             child: ListView.builder(
               controller: _scrollController,
