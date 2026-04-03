@@ -39,17 +39,11 @@ class CategorySection extends ConsumerWidget {
               labelStyle: TextStyle(
                 color: selected
                     ? Colors
-                          .black87 // better contrast on amber
+                          .black87
                     : isDark
                     ? Colors.white70
                     : Colors.black87,
               ),
-              // labelStyle: TextStyle(
-              // color: isDark
-              //     ? Colors.white70
-              //     : Colors.black87,
-
-              // ),
               selected: selected,
               onSelected: (_) {
                 ref
