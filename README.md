@@ -1,7 +1,7 @@
 # 📰 P_Paper – News App with API Integration
 
 A dynamic News app built with Flutter and Dio, featuring Google & Email authentication, bookmarks, search functionality, and modern feature-based architecture.  
-Check a demo on YouTube: [https://youtu.be/yXOdh16InWQ](https://youtu.be/k69VCs_xfGU)](https://youtu.be/k69VCs_xfGU)
+Check a demo on YouTube: https://youtu.be/k69VCs_xfGU
 ---
 
 ## 🚀 Features
